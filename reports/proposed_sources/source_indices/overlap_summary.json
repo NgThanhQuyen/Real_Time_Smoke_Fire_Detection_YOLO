@@ -1,0 +1,15 @@
+{
+  "home": {
+    "images": 6500,
+    "hash_candidate_val": 9,
+    "hash_candidate_train": 1
+  },
+  "bowfire": {
+    "images": 226,
+    "hash_candidate_train": 1
+  },
+  "sainet_full": {
+    "images": 5596,
+    "hash_candidate_train": 1
+  }
+}

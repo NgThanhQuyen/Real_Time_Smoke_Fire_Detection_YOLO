@@ -1,0 +1,7 @@
+names:
+- khoi
+- lua
+nc: 2
+test: /kaggle/input/datasets/quynnguynthanh/finalsfd-yolo-dataset-v6/images/test
+train: /kaggle/input/datasets/quynnguynthanh/finalsfd-yolo-dataset-v6/images/train
+val: /kaggle/input/datasets/quynnguynthanh/finalsfd-yolo-dataset-v6/images/val

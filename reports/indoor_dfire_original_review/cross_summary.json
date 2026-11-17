@@ -1,0 +1,18 @@
+{
+  "dfire_images": 21187,
+  "indoor_fire_only": 2165,
+  "exact_cross": 0,
+  "perceptual_pairs_dhash_le6_phash_le12": 5,
+  "perceptual_indoor_images": 5,
+  "pairs_by_dfire_split": {
+    "test": 3,
+    "train": 2
+  },
+  "indoor_images_by_dfire_split": {
+    "train": 2,
+    "val": 0,
+    "test": 3
+  },
+  "nearest_dhash_le6": 223,
+  "comparison_seconds": 9.9
+}

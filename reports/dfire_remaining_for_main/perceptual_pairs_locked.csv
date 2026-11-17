@@ -1,0 +1,16 @@
+﻿candidate,category,locked_image,locked_split,dhash_distance,phash_distance
+train/images/PublicDataset01008.jpg,both,valid/images/fire1-1063-_jpg.rf.f27657cbd68a649d55abe8b0f5853fc9.jpg,valid,1,0
+train/images/WEB01452.jpg,background,test/images/bg_dfire_01608.jpg,test,5,10
+train/images/WEB01588.jpg,background,test/images/bg_dfire_01616.jpg,test,4,10
+train/images/WEB01595.jpg,background,test/images/bg_dfire_01642.jpg,test,6,0
+train/images/WEB01687.jpg,background,test/images/bg_dfire_01641.jpg,test,5,6
+train/images/WEB01949.jpg,background,valid/images/Img_1466_jpg.rf.d8cf83457ae10dcc5749754c28749984.jpg,valid,3,2
+train/images/WEB01949.jpg,background,valid/images/Img_1500_jpg.rf.f57f84baf976de612671aa2d33fbdfa2.jpg,valid,2,4
+train/images/WEB01949.jpg,background,test/images/Img_1426_jpg.rf.680e1b3289b1435d863e2e3bb223a679.jpg,test,1,4
+train/images/WEB02003.jpg,background,valid/images/bg_dfire_01578.jpg,valid,5,12
+train/images/WEB02006.jpg,background,test/images/bg_dfire_01630.jpg,test,6,6
+train/images/WEB02008.jpg,background,test/images/bg_dfire_01630.jpg,test,5,6
+train/images/WEB03654.jpg,background,valid/images/bg_dfire_01582.jpg,valid,6,6
+train/images/WEB03654.jpg,background,test/images/bg_dfire_01609.jpg,test,6,10
+train/images/WEB03665.jpg,background,test/images/bg_dfire_01609.jpg,test,6,12
+train/images/WEB04033.jpg,both,test/images/WEBFire1365_jpg.rf.fbdb52551a9a7fabb769ebeea0f89ee4.jpg,test,4,12

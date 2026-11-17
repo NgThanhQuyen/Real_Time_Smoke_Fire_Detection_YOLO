@@ -1,0 +1,63 @@
+{
+  "source_zip": "F:\\6\\KLTN\\Smoke-Fire-Dataset\\fire and smoke detection.v2i.yolov11.zip",
+  "background_zip": "F:\\6\\KLTN\\Real_Time_Smoke_Fire_Detection_YOLO\\runtime\\fire_smoke_dfire_final.zip",
+  "seed": 20261109,
+  "background_quota": {
+    "train": 1500,
+    "valid": 150,
+    "test": 150
+  },
+  "splits": {
+    "train": {
+      "images": 13769,
+      "categories": {
+        "fire_only": 2819,
+        "smoke_only": 3110,
+        "both": 6340,
+        "background": 1500
+      },
+      "fire_present": 9159,
+      "smoke_present": 9450,
+      "fire_boxes": 20250,
+      "smoke_boxes": 16881,
+      "video_groups": 10,
+      "youtube_groups": 401,
+      "moved_positive_images": 1492
+    },
+    "valid": {
+      "images": 1684,
+      "categories": {
+        "fire_only": 352,
+        "smoke_only": 389,
+        "both": 791,
+        "background": 152
+      },
+      "fire_present": 1143,
+      "smoke_present": 1180,
+      "fire_boxes": 2758,
+      "smoke_boxes": 2945,
+      "video_groups": 4,
+      "youtube_groups": 167,
+      "moved_positive_images": 1392
+    },
+    "test": {
+      "images": 1684,
+      "categories": {
+        "fire_only": 352,
+        "smoke_only": 389,
+        "both": 793,
+        "background": 150
+      },
+      "fire_present": 1145,
+      "smoke_present": 1182,
+      "fire_boxes": 2413,
+      "smoke_boxes": 2046,
+      "video_groups": 5,
+      "youtube_groups": 118,
+      "moved_positive_images": 1467
+    }
+  },
+  "group_count": 705,
+  "positive_images": 15337,
+  "background_images_added": 1800
+}

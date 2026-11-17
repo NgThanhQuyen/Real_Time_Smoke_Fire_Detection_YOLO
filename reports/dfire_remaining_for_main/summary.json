@@ -1,0 +1,37 @@
+{
+  "current_dataset": "fire_smoke_detection_yolov11_bg_dfire2000_v1",
+  "locked_images": 1506,
+  "counts_by_category_pool": {
+    "background": {
+      "clean_train": 2722,
+      "raw_near_train": 27
+    },
+    "both": {
+      "clean_train": 2523,
+      "raw_near_train": 8
+    },
+    "smoke_only": {
+      "clean_train": 2160,
+      "raw_near_train": 16
+    }
+  },
+  "exact_duplicate_current": {
+    "smoke_only": 2000,
+    "background": 1204
+  },
+  "exact_duplicate_pool": {},
+  "raw_label_issues": {
+    "box_outside_image": 1
+  },
+  "near_hash_candidates": {
+    "both": 2,
+    "background": 10
+  },
+  "same_source_id_candidates": {},
+  "method": [
+    "Chỉ xét train D-Fire sạch v2 và khung train từng bị loại chỉ do gần giống trong train",
+    "Không lấy val/test D-Fire hoặc ảnh bị cách ly vì nguy cơ cùng cảnh với val/test",
+    "Trùng 100% dựa SHA-256 của byte ảnh; dHash<=6 và pHash<=12 chỉ tạo cặp cần duyệt",
+    "Không sửa hoặc ghép dữ liệu trong bước khảo sát"
+  ]
+}

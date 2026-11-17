@@ -1,0 +1,12 @@
+source,split,image,sha256,dhash,phash,exact_splits,nearest_split,nearest_dfire,dhash_distance,phash_distance,candidate_count
+home,train,images/train_2859.jpg,73646add593cbac8b54d162c048bcbe20e44de040cd22fa420c1cff2cef13ba1,e0f0f0f0f87070f0,9966649b9b24653b,,val,val/images/WEB02713.jpg,5,10,1
+home,train,images/train_2919.jpg,eb2890bdaf30a18ebe315b2952441d9d66c298fbfe01392d09f39fb608aab959,e0f0f0f8f8707070,9966649b9b24653b,,val,val/images/WEB02713.jpg,5,10,1
+home,train,images/train_2948.jpg,b4f30fbcbcebced7c93cdb5c3877effc773490e7f201b90cd30839f57a6d82d0,e0f0f0f8f8f07070,9966669b9b24643b,,val,val/images/WEB02713.jpg,6,10,1
+home,train,images/train_3019.jpg,bcb1e3385983d2dbf81f87bc6e5e176d9f7d97234d379f010222cc6da7ceddd0,e0f0f0f0f8707070,9966649b9b2c6533,,train,train/images/PublicDataset00012.jpg,6,12,2
+home,train,images/train_827.jpg,0b96895096c4055163556d21c0789f0d082d91247a945ab080c9ca932bc2bab2,e0f0d0f8f87070f0,9966649b9b2c643b,,val,val/images/WEB02713.jpg,5,10,1
+home,train,images/train_940.jpg,18339ef5f3f0c17da643a99ad05bcdd03177d56835dc851ecaa0f1655044bad2,e0f0d0f8f87070f0,9966649b9b2c6533,,val,val/images/WEB02713.jpg,5,12,1
+home,val,images/val_1201.jpg,7944302acda65c22c73e854888d0028ca6562676ec6a609c6036bd63c79ee6e6,e0f0f0f8f8f070f0,9966669b9b2c6433,,val,val/images/WEB02713.jpg,5,12,1
+home,val,images/val_6.jpg,e141833c8c071e055a8b4c11fb80a2fb9290fb21a6a72a0904c4b0de8d7d51b6,e0f0d0f8f8707070,9966649b9b24653b,,val,val/images/WEB02713.jpg,6,10,1
+home,val,images/val_869.jpg,08ba2fa5cf3016dd7cd816603fffdeccc02a179a6d64be8220bce271687f8d30,e0f0f0f8f8707070,9966669b9324653b,,val,val/images/WEB02713.jpg,5,12,1
+bowfire,unsplit,BoWFireDataset/dataset/img/not_fire072.png,13786fbe5f74fde46cd3d5db6c0ae6f5c82a9699865be93f36a1bc0ceb5bf134,f0f0e0e0f0e0e030,ccb333cc33c61c33,,train,train/images/WEB05864.jpg,6,12,1
+sainet_full,validation,407225.jpg,f0e91cdf6ebc18a9b78b59b66f84b9f33a284511aeb0aa25db1b845b3d96218f,f0f8f8f8f0f0f0b0,9991d4c66a7b3929,,train,train/images/WEB01264.jpg,6,12,1

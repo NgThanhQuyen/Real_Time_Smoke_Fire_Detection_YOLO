@@ -1,0 +1,81 @@
+{
+  "source_zip": "F:\\6\\KLTN\\Smoke-Fire-Dataset\\D-Fire.zip",
+  "output_zip": "F:\\6\\KLTN\\Real_Time_Smoke_Fire_Detection_YOLO\\runtime\\dfire_original_clean_v1.zip",
+  "class_map": {
+    "0": "smoke",
+    "1": "fire"
+  },
+  "before": {
+    "train": {
+      "images": 17221,
+      "background": 7833,
+      "smoke_images": 8444,
+      "fire_images": 4707,
+      "smoke_boxes": 9550,
+      "fire_boxes": 11814,
+      "fire_only": 944,
+      "smoke_only": 4681,
+      "both": 3763
+    },
+    "test": {
+      "images": 4306,
+      "background": 2005,
+      "smoke_images": 2081,
+      "fire_images": 1115,
+      "smoke_boxes": 2315,
+      "fire_boxes": 2878,
+      "smoke_only": 1186,
+      "both": 895,
+      "fire_only": 220
+    }
+  },
+  "after": {
+    "train": {
+      "images": 16943,
+      "background": 7833,
+      "smoke_images": 8199,
+      "fire_images": 4470,
+      "smoke_boxes": 9230,
+      "fire_boxes": 11090,
+      "fire_only": 911,
+      "smoke_only": 4640,
+      "both": 3559
+    },
+    "test": {
+      "images": 4244,
+      "background": 2005,
+      "smoke_images": 2031,
+      "fire_images": 1065,
+      "smoke_boxes": 2253,
+      "fire_boxes": 2740,
+      "smoke_only": 1174,
+      "both": 857,
+      "fire_only": 208
+    }
+  },
+  "status_counts": {
+    "kept": 21187,
+    "removed_invalid": 340
+  },
+  "invalid_reason_counts": {
+    "outside_image": 379,
+    "nonpositive_size": 18
+  },
+  "duplicate_hash_groups": 0,
+  "split_list_counts": {
+    "5-fold cross validation/dfire_train1.txt": 13539,
+    "5-fold cross validation/dfire_train2.txt": 13575,
+    "5-fold cross validation/dfire_train3.txt": 13554,
+    "5-fold cross validation/dfire_train4.txt": 13552,
+    "5-fold cross validation/dfire_train5.txt": 13552,
+    "5-fold cross validation/dfire_valid1.txt": 3404,
+    "5-fold cross validation/dfire_valid2.txt": 3368,
+    "5-fold cross validation/dfire_valid3.txt": 3389,
+    "5-fold cross validation/dfire_valid4.txt": 3391,
+    "5-fold cross validation/dfire_valid5.txt": 3391,
+    "dfire_test.txt": 4244,
+    "dfire_train.txt": 16943,
+    "video_test.txt": 70,
+    "video_valid.txt": 30
+  }
+}

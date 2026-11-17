@@ -1,0 +1,3014 @@
+[
+  {
+    "review_id": "fire_only:006",
+    "output_image": "train/images/Catargiu_f4c003743384f8d9d5635c44.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        21.25,
+        410.74999999999994,
+        189.75,
+        450.25
+      ]
+    ],
+    "predictions": []
+  },
+  {
+    "review_id": "fire_only:016",
+    "output_image": "train/images/Catargiu_1f35d8db638ca9bada0f90d8.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        130.75,
+        106.50000000000003,
+        290.25,
+        529.5
+      ]
+    ],
+    "predictions": []
+  },
+  {
+    "review_id": "fire_only:019",
+    "output_image": "train/images/Catargiu_a1a7151600bd8d6d9ae7379f.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.62,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        86.0,
+        265.0,
+        273.0,
+        410.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.62,
+        "xyxy": [
+          195.35,
+          316.94,
+          276.94,
+          405.5
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:020",
+    "output_image": "train/images/Catargiu_ee5c326783188a9173c346c0.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.58163,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        281.75,
+        5.500000000000007,
+        434.25,
+        553.5
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.58163,
+        "xyxy": [
+          279.12,
+          0.4,
+          435.73,
+          426.92
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:021",
+    "output_image": "train/images/Catargiu_347923f61a4bd413a2918226.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.77634,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        175.25,
+        111.74999999999997,
+        434.75,
+        539.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.77634,
+        "xyxy": [
+          156.97,
+          118.86,
+          454.8,
+          510.63
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:029",
+    "output_image": "train/images/Catargiu_7c3b36d544b6fe33f485a629.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        222.0,
+        132.0,
+        398.0,
+        248.0
+      ]
+    ],
+    "predictions": []
+  },
+  {
+    "review_id": "fire_only:031",
+    "output_image": "train/images/Catargiu_eb25bd125302579070936f4f.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.65394,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        216.0,
+        164.75,
+        360.0,
+        404.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.65394,
+        "xyxy": [
+          202.4,
+          167.27,
+          355.36,
+          429.16
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:033",
+    "output_image": "train/images/Catargiu_1e5300f59ede591782c0a515.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        124.75000000000001,
+        26.750000000000007,
+        367.25,
+        507.24999999999994
+      ]
+    ],
+    "predictions": []
+  },
+  {
+    "review_id": "fire_only:039",
+    "output_image": "train/images/Catargiu_12f00429274eb06f5ae8f516.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 2,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.49872,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        285.25,
+        248.25,
+        359.75,
+        312.75
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.49872,
+        "xyxy": [
+          235.78,
+          256.11,
+          375.81,
+          332.83
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.28555,
+        "xyxy": [
+          288.55,
+          256.92,
+          372.41,
+          329.93
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:045",
+    "output_image": "train/images/Catargiu_90d993b206c1a31e74b09778.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 2,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.3965,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        358.75,
+        47.749999999999986,
+        484.25,
+        540.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.3965,
+        "xyxy": [
+          376.59,
+          0.0,
+          478.98,
+          518.58
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.2901,
+        "xyxy": [
+          285.14,
+          5.22,
+          472.1,
+          576.12
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:051",
+    "output_image": "train/images/Catargiu_125cc6287f32d284f025c76c.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 2,
+    "matched_fire_boxes_iou50": 2,
+    "fire_predictions": 2,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.80501,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        170.5,
+        359.0,
+        274.5,
+        529.0
+      ],
+      [
+        285.74999999999994,
+        0.2499999999999858,
+        405.25,
+        203.75
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.80501,
+        "xyxy": [
+          167.66,
+          353.78,
+          276.11,
+          529.16
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.71812,
+        "xyxy": [
+          253.92,
+          0.0,
+          409.48,
+          198.86
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:053",
+    "output_image": "train/images/Catargiu_809c763043806f940d9edab6.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        129.99999999999997,
+        354.00000000000006,
+        328.0,
+        450.0
+      ]
+    ],
+    "predictions": []
+  },
+  {
+    "review_id": "fire_only:054",
+    "output_image": "train/images/Catargiu_3b7aabb70826dd81a987a92b.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 2,
+    "matched_fire_boxes_iou50": 2,
+    "fire_predictions": 2,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.84547,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        215.75000000000003,
+        211.50000000000003,
+        436.25,
+        495.5
+      ],
+      [
+        271.25,
+        99.5,
+        326.75,
+        188.5
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.84547,
+        "xyxy": [
+          214.27,
+          206.42,
+          435.73,
+          489.17
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.54721,
+        "xyxy": [
+          278.15,
+          95.32,
+          320.31,
+          186.89
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:060",
+    "output_image": "train/images/Catargiu_3bb42a4b1ba241a1bec33e5f.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 2,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.73331,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        307.0,
+        117.5,
+        415.0,
+        331.5
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.73331,
+        "xyxy": [
+          309.56,
+          113.41,
+          422.68,
+          323.73
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.46813,
+        "xyxy": [
+          317.8,
+          113.42,
+          418.45,
+          272.06
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:061",
+    "output_image": "train/images/Catargiu_f90e21e2f2f97dcb15649275.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.31457,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        107.74999999999999,
+        165.0,
+        491.25,
+        240.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.31457,
+        "xyxy": [
+          123.12,
+          177.63,
+          491.98,
+          239.03
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:067",
+    "output_image": "train/images/Catargiu_0b9a9e06cfd7a800875a0d28.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 2,
+    "matched_fire_boxes_iou50": 2,
+    "fire_predictions": 3,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.66124,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        474.0,
+        394.5,
+        544.0,
+        444.5
+      ],
+      [
+        123.25,
+        504.75,
+        193.75,
+        549.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.66124,
+        "xyxy": [
+          456.21,
+          392.24,
+          544.7,
+          446.27
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.49057,
+        "xyxy": [
+          110.15,
+          488.35,
+          206.09,
+          546.37
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.28835,
+        "xyxy": [
+          350.25,
+          195.64,
+          558.2,
+          432.47
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:068",
+    "output_image": "train/images/Catargiu_cb2567fb24b5830239483ad4.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.62278,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        285.5,
+        366.75,
+        352.5,
+        479.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.62278,
+        "xyxy": [
+          237.92,
+          358.66,
+          358.31,
+          484.46
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:073",
+    "output_image": "train/images/Catargiu_1cdaebbd3f02c8d3284f82c2.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        49.25000000000001,
+        214.0,
+        499.74999999999994,
+        397.0
+      ]
+    ],
+    "predictions": []
+  },
+  {
+    "review_id": "fire_only:075",
+    "output_image": "train/images/Catargiu_be6d045226667808ab7f7159.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 5,
+    "smoke_predictions": 2,
+    "max_fire_conf": 0.65789,
+    "max_smoke_conf": 0.61772,
+    "ground_truth": [
+      [
+        221.0,
+        53.75,
+        471.0,
+        412.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.65789,
+        "xyxy": [
+          258.01,
+          57.93,
+          363.56,
+          162.26
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.64484,
+        "xyxy": [
+          402.72,
+          370.09,
+          462.78,
+          413.76
+        ]
+      },
+      {
+        "class_id": 0,
+        "confidence": 0.61772,
+        "xyxy": [
+          0.34,
+          0.0,
+          638.87,
+          295.92
+        ]
+      },
+      {
+        "class_id": 0,
+        "confidence": 0.58253,
+        "xyxy": [
+          0.0,
+          0.08,
+          239.5,
+          340.82
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.37861,
+        "xyxy": [
+          400.89,
+          58.19,
+          442.68,
+          157.16
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.26652,
+        "xyxy": [
+          476.05,
+          409.61,
+          492.38,
+          435.4
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.26568,
+        "xyxy": [
+          368.0,
+          0.0,
+          428.85,
+          14.81
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:084",
+    "output_image": "train/images/Catargiu_8a73d1b2502bd031cc5508fe.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 2,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.77594,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        296.5,
+        386.99999999999994,
+        355.50000000000006,
+        436.0
+      ],
+      [
+        346.0,
+        80.0,
+        503.00000000000006,
+        469.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.77594,
+        "xyxy": [
+          280.36,
+          68.43,
+          507.19,
+          493.91
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:085",
+    "output_image": "train/images/Catargiu_223a88d85840027bdf771162.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.80361,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        287.75,
+        294.25,
+        328.25,
+        348.75
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.80361,
+        "xyxy": [
+          287.22,
+          295.31,
+          325.24,
+          342.15
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:088",
+    "output_image": "train/images/Catargiu_87caf2c47920791c0cf42a28.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 1,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.26796,
+    "ground_truth": [
+      [
+        284.5,
+        205.5,
+        382.5,
+        319.5
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 0,
+        "confidence": 0.26796,
+        "xyxy": [
+          0.0,
+          0.63,
+          181.0,
+          308.73
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:094",
+    "output_image": "train/images/Catargiu_ef9cb17e2154218cab654763.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 2,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.73167,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        158.25,
+        6.499999999999986,
+        419.74999999999994,
+        473.5
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.73167,
+        "xyxy": [
+          185.99,
+          3.19,
+          434.29,
+          506.84
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.53815,
+        "xyxy": [
+          126.9,
+          0.0,
+          593.27,
+          565.51
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:098",
+    "output_image": "train/images/Catargiu_bfa92a83f425deb2046e5de7.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 1,
+    "max_fire_conf": 0.86813,
+    "max_smoke_conf": 0.395,
+    "ground_truth": [
+      [
+        243.49999999999997,
+        145.0,
+        427.5,
+        633.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.86813,
+        "xyxy": [
+          249.81,
+          187.31,
+          430.31,
+          638.35
+        ]
+      },
+      {
+        "class_id": 0,
+        "confidence": 0.395,
+        "xyxy": [
+          235.52,
+          15.26,
+          424.55,
+          472.29
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:103",
+    "output_image": "train/images/Catargiu_c8e0fea6bca55c3a160fa66c.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.8247,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        65.25000000000003,
+        206.0,
+        471.75,
+        414.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.8247,
+        "xyxy": [
+          90.83,
+          207.43,
+          524.93,
+          422.16
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:104",
+    "output_image": "train/images/Catargiu_34a3caffe0dc49a40d0a4a92.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 2,
+    "matched_fire_boxes_iou50": 2,
+    "fire_predictions": 3,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.83886,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        385.0,
+        10.999999999999996,
+        640.0,
+        219.0
+      ],
+      [
+        210.75,
+        270.25,
+        389.25,
+        358.75
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.83886,
+        "xyxy": [
+          391.03,
+          18.8,
+          625.62,
+          229.2
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.45789,
+        "xyxy": [
+          217.92,
+          241.49,
+          381.56,
+          365.18
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.33188,
+        "xyxy": [
+          212.08,
+          14.69,
+          624.62,
+          376.78
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:110",
+    "output_image": "train/images/Catargiu_59ef9850d8c6b9fff691e1ba.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.83096,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        36.0,
+        127.00000000000003,
+        281.0,
+        537.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.83096,
+        "xyxy": [
+          47.63,
+          147.27,
+          283.61,
+          533.14
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:111",
+    "output_image": "train/images/Catargiu_2c42ac06d506feba8c0dec40.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.69773,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        405.99999999999994,
+        354.00000000000006,
+        510.0,
+        420.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.69773,
+        "xyxy": [
+          398.03,
+          356.34,
+          497.93,
+          412.71
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:115",
+    "output_image": "train/images/Catargiu_81f72f08dce04288a5b55633.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 2,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.65867,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        228.25000000000003,
+        479.75,
+        317.75,
+        590.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.65867,
+        "xyxy": [
+          242.13,
+          476.16,
+          310.97,
+          546.41
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.28805,
+        "xyxy": [
+          232.06,
+          470.56,
+          312.86,
+          582.25
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:118",
+    "output_image": "train/images/Catargiu_e99d78316d1d0894c8e108d4.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.76865,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        182.5,
+        168.25,
+        431.5,
+        479.74999999999994
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.76865,
+        "xyxy": [
+          166.37,
+          191.53,
+          431.25,
+          536.46
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:120",
+    "output_image": "train/images/Catargiu_d0f293fc11ba43c7d9956934.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.81223,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        206.25,
+        350.74999999999994,
+        307.75,
+        455.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.81223,
+        "xyxy": [
+          206.13,
+          366.47,
+          305.55,
+          451.56
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:122",
+    "output_image": "train/images/Catargiu_1fa01f140e97464fc4a7d2b0.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 2,
+    "matched_fire_boxes_iou50": 2,
+    "fire_predictions": 2,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.87163,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        162.99999999999997,
+        269.75,
+        500.0,
+        455.25
+      ],
+      [
+        214.50000000000003,
+        140.5,
+        302.5,
+        205.5
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.87163,
+        "xyxy": [
+          175.99,
+          263.58,
+          486.88,
+          457.25
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.70573,
+        "xyxy": [
+          214.95,
+          143.71,
+          308.46,
+          206.35
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:124",
+    "output_image": "train/images/Catargiu_db430c72d77f8640a7b0f044.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.75063,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        330.75,
+        196.75,
+        419.25,
+        270.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.75063,
+        "xyxy": [
+          330.48,
+          198.68,
+          421.45,
+          272.51
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:125",
+    "output_image": "train/images/Catargiu_08369388d332b662c57c423d.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.713,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        91.49999999999999,
+        114.75,
+        473.5,
+        280.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.713,
+        "xyxy": [
+          124.47,
+          116.88,
+          477.44,
+          256.47
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:129",
+    "output_image": "train/images/Catargiu_799074e587063249fd4a5641.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        15.999999999999996,
+        325.99999999999994,
+        206.0,
+        440.0
+      ]
+    ],
+    "predictions": []
+  },
+  {
+    "review_id": "fire_only:130",
+    "output_image": "train/images/Catargiu_2d8c463c0c76fd7e3548314d.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.87694,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        242.50000000000003,
+        69.5,
+        471.50000000000006,
+        585.5
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.87694,
+        "xyxy": [
+          227.25,
+          69.02,
+          465.87,
+          578.96
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:135",
+    "output_image": "train/images/Catargiu_1e287258313dcfdb96f0f5a6.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.8352,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        355.0,
+        144.75,
+        525.0,
+        415.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.8352,
+        "xyxy": [
+          334.85,
+          107.13,
+          522.87,
+          441.54
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:136",
+    "output_image": "train/images/Catargiu_7060eac6d0d434e278ab32e7.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 1,
+    "max_fire_conf": 0.74651,
+    "max_smoke_conf": 0.30174,
+    "ground_truth": [
+      [
+        247.5,
+        430.75,
+        316.5,
+        593.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.74651,
+        "xyxy": [
+          242.29,
+          441.49,
+          319.46,
+          596.02
+        ]
+      },
+      {
+        "class_id": 0,
+        "confidence": 0.30174,
+        "xyxy": [
+          0.0,
+          0.0,
+          614.78,
+          154.89
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:138",
+    "output_image": "train/images/Catargiu_232d68a18701b4acc48f716d.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.91225,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        178.5,
+        157.0,
+        405.5,
+        435.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.91225,
+        "xyxy": [
+          175.95,
+          185.44,
+          414.91,
+          460.99
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:139",
+    "output_image": "train/images/Catargiu_3682f43a4846ce71ecccd3e2.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.83997,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        290.25,
+        68.75,
+        523.75,
+        425.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.83997,
+        "xyxy": [
+          296.71,
+          81.86,
+          524.84,
+          422.37
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:140",
+    "output_image": "train/images/Catargiu_a7ae381081c461587ee5a22f.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.49877,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        245.0,
+        444.0,
+        303.0,
+        556.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.49877,
+        "xyxy": [
+          196.34,
+          450.88,
+          341.75,
+          548.05
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:144",
+    "output_image": "train/images/Catargiu_1348a3644fa8319a83c61ed6.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.77219,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        234.50000000000003,
+        168.0,
+        321.5,
+        245.99999999999997
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.77219,
+        "xyxy": [
+          231.43,
+          165.88,
+          320.68,
+          239.33
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:145",
+    "output_image": "train/images/Catargiu_96f1d00272ed59f69476bb80.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.87952,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        1.999999999999993,
+        0.0,
+        553.0,
+        368.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.87952,
+        "xyxy": [
+          5.15,
+          0.0,
+          538.91,
+          374.37
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:146",
+    "output_image": "train/images/Catargiu_173d01daccd63ae81e3b6dbe.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 2,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 3,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.72725,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        222.0,
+        255.99999999999997,
+        356.0,
+        592.0
+      ],
+      [
+        408.0,
+        375.99999999999994,
+        590.0,
+        600.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.72725,
+        "xyxy": [
+          240.18,
+          284.85,
+          346.63,
+          595.25
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.72028,
+        "xyxy": [
+          400.7,
+          480.84,
+          577.45,
+          595.32
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.71203,
+        "xyxy": [
+          508.0,
+          397.29,
+          596.49,
+          495.79
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:154",
+    "output_image": "train/images/Catargiu_407a1ff5ab7d7484e86c414c.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 2,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.7919,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        330.0,
+        155.0,
+        505.99999999999994,
+        245.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.7919,
+        "xyxy": [
+          326.02,
+          155.8,
+          503.39,
+          245.17
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.45604,
+        "xyxy": [
+          0.62,
+          329.71,
+          256.49,
+          503.3
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:155",
+    "output_image": "train/images/Catargiu_a8f113f8d2eaea6b00774d7c.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 2,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.74737,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        184.0,
+        0.2500000000000213,
+        499.0,
+        406.75
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.74737,
+        "xyxy": [
+          288.26,
+          327.33,
+          343.83,
+          371.37
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.38145,
+        "xyxy": [
+          345.12,
+          0.53,
+          414.66,
+          120.33
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:156",
+    "output_image": "train/images/Catargiu_2d1a9f12a188f5a9fea6c498.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 3,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.7402,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        276.75,
+        313.75,
+        436.25,
+        501.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.7402,
+        "xyxy": [
+          257.66,
+          314.08,
+          457.0,
+          503.49
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.61946,
+        "xyxy": [
+          255.59,
+          236.68,
+          455.91,
+          504.4
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.36766,
+        "xyxy": [
+          140.44,
+          179.85,
+          168.82,
+          250.54
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:158",
+    "output_image": "train/images/Catargiu_1f43abd50e526ce933451311.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.80923,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        261.24999999999994,
+        92.00000000000001,
+        429.74999999999994,
+        364.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.80923,
+        "xyxy": [
+          271.38,
+          109.07,
+          420.74,
+          318.75
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:162",
+    "output_image": "train/images/Catargiu_8b743e76a28736a8e2132cc1.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.82639,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        229.99999999999997,
+        12.00000000000001,
+        445.99999999999994,
+        224.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.82639,
+        "xyxy": [
+          212.81,
+          1.97,
+          418.44,
+          217.96
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:163",
+    "output_image": "train/images/Catargiu_71a5ed1c67ad96bbb0b14ee9.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 2,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.32109,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        132.0,
+        68.49999999999997,
+        494.00000000000006,
+        430.5
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.32109,
+        "xyxy": [
+          144.57,
+          248.75,
+          461.75,
+          436.99
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.31669,
+        "xyxy": [
+          145.11,
+          246.51,
+          363.81,
+          435.56
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:166",
+    "output_image": "train/images/Catargiu_4fffc2fd79c97eb54b71e048.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 2,
+    "matched_fire_boxes_iou50": 2,
+    "fire_predictions": 2,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.84953,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        59.0,
+        211.0,
+        321.0,
+        476.0
+      ],
+      [
+        407.5,
+        173.25000000000003,
+        524.5,
+        328.75
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.84953,
+        "xyxy": [
+          70.04,
+          218.97,
+          276.92,
+          486.32
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.76411,
+        "xyxy": [
+          407.64,
+          163.72,
+          520.17,
+          330.66
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:168",
+    "output_image": "train/images/Catargiu_64b66c18b9fefda1499f165e.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 2,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.79923,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        90.25,
+        255.25000000000003,
+        265.75,
+        573.75
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.79923,
+        "xyxy": [
+          81.77,
+          256.91,
+          269.77,
+          571.92
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.36609,
+        "xyxy": [
+          135.1,
+          542.64,
+          242.5,
+          609.05
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:169",
+    "output_image": "train/images/Catargiu_005a67ab461732af861011e6.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.77765,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        237.0,
+        100.75000000000001,
+        381.0,
+        320.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.77765,
+        "xyxy": [
+          229.34,
+          117.21,
+          379.36,
+          312.61
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:173",
+    "output_image": "train/images/Catargiu_1e92e469c592fc986391a520.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.73809,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        268.0,
+        214.0,
+        424.0,
+        316.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.73809,
+        "xyxy": [
+          287.93,
+          217.99,
+          467.99,
+          313.34
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:174",
+    "output_image": "train/images/Catargiu_f27a45de07aa6f79e9428c4a.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.58455,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        270.0,
+        112.25000000000001,
+        525.0,
+        333.75
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.58455,
+        "xyxy": [
+          283.19,
+          140.19,
+          487.12,
+          324.66
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:175",
+    "output_image": "train/images/Catargiu_757f183e3b7813b9ff8381cc.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        192.00000000000003,
+        257.25,
+        339.0,
+        338.75
+      ]
+    ],
+    "predictions": []
+  },
+  {
+    "review_id": "fire_only:182",
+    "output_image": "train/images/Catargiu_c5f6f49fff123e546c2e52c0.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        142.0,
+        222.0,
+        272.0,
+        352.0
+      ]
+    ],
+    "predictions": []
+  },
+  {
+    "review_id": "fire_only:186",
+    "output_image": "train/images/Catargiu_6a547494eb9f3e99ec50c0d5.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.77087,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        193.5,
+        241.0,
+        377.5,
+        401.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.77087,
+        "xyxy": [
+          259.0,
+          297.35,
+          342.19,
+          403.26
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:191",
+    "output_image": "train/images/Catargiu_ccc4aaadeb4f0ff92ad7dea8.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.42888,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        212.5,
+        458.75,
+        252.5,
+        504.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.42888,
+        "xyxy": [
+          205.49,
+          468.14,
+          257.4,
+          502.72
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:193",
+    "output_image": "train/images/Catargiu_43d06b1decb68e874808d78f.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.75269,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        261.0,
+        151.0,
+        399.0,
+        303.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.75269,
+        "xyxy": [
+          270.48,
+          151.75,
+          391.29,
+          308.1
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:196",
+    "output_image": "train/images/Catargiu_2dd0155ec8dc2f486c40ea68.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 2,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.77522,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        36.74999999999997,
+        61.75000000000001,
+        516.25,
+        549.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.77522,
+        "xyxy": [
+          114.14,
+          65.24,
+          376.93,
+          560.09
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.56109,
+        "xyxy": [
+          121.32,
+          503.46,
+          245.21,
+          591.92
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:198",
+    "output_image": "train/images/Catargiu_d5c7cf2431755e4ff98a5b07.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.74662,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        293.0,
+        308.0,
+        405.0,
+        519.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.74662,
+        "xyxy": [
+          283.87,
+          350.39,
+          388.64,
+          511.71
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:201",
+    "output_image": "train/images/Catargiu_42c87395ccf2d67002f000f4.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.8705,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        194.24999999999997,
+        77.75,
+        403.75,
+        382.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.8705,
+        "xyxy": [
+          201.92,
+          53.82,
+          422.45,
+          384.12
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:202",
+    "output_image": "train/images/Catargiu_39d53b474bd57e83f77ab6ad.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.84154,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        316.25,
+        1.999999999999993,
+        460.75,
+        355.99999999999994
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.84154,
+        "xyxy": [
+          319.15,
+          2.95,
+          473.8,
+          351.66
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:205",
+    "output_image": "train/images/Catargiu_89f9943c30012edf00d2a637.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.73983,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        115.5,
+        78.50000000000001,
+        254.5,
+        558.5
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.73983,
+        "xyxy": [
+          124.15,
+          78.85,
+          244.24,
+          507.8
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:206",
+    "output_image": "train/images/Catargiu_4668d4f4c4beafa911de11b4.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        263.75000000000006,
+        128.25,
+        390.25000000000006,
+        325.75
+      ]
+    ],
+    "predictions": []
+  },
+  {
+    "review_id": "fire_only:207",
+    "output_image": "train/images/Catargiu_a5de76cec9a870d2b65ec487.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        146.0,
+        96.0,
+        270.0,
+        338.0
+      ]
+    ],
+    "predictions": []
+  },
+  {
+    "review_id": "fire_only:209",
+    "output_image": "train/images/Catargiu_e2b2fb302917c9db58c86ac5.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.75247,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        283.75,
+        433.5,
+        328.25,
+        583.5
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.75247,
+        "xyxy": [
+          255.43,
+          426.73,
+          344.87,
+          587.88
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:214",
+    "output_image": "train/images/Catargiu_694317393b8d85bcf37167d6.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.73723,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        0.0,
+        294.75,
+        484.0,
+        460.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.73723,
+        "xyxy": [
+          164.03,
+          308.96,
+          479.37,
+          453.65
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:219",
+    "output_image": "train/images/Catargiu_a7793dc969338ab32dc19c92.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.88471,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        178.0,
+        160.75000000000003,
+        362.0,
+        518.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.88471,
+        "xyxy": [
+          159.28,
+          121.12,
+          365.95,
+          508.51
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:221",
+    "output_image": "train/images/Catargiu_392aac09f79da403e42f60ec.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.80909,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        357.5,
+        244.75,
+        488.49999999999994,
+        430.25
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.80909,
+        "xyxy": [
+          362.05,
+          244.48,
+          475.61,
+          427.34
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:223",
+    "output_image": "train/images/Catargiu_c74aab4c39ed294f555d05e8.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        232.75,
+        498.75,
+        266.25,
+        527.25
+      ]
+    ],
+    "predictions": []
+  },
+  {
+    "review_id": "fire_only:226",
+    "output_image": "train/images/Catargiu_47112b2b7e34f4d4320c3211.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.71289,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        333.25,
+        304.0,
+        450.75,
+        536.0
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.71289,
+        "xyxy": [
+          334.13,
+          296.79,
+          442.61,
+          568.72
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:233",
+    "output_image": "train/images/Catargiu_e74d1bd61741da59c820078a.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 1,
+    "fire_predictions": 2,
+    "smoke_predictions": 1,
+    "max_fire_conf": 0.54701,
+    "max_smoke_conf": 0.51676,
+    "ground_truth": [
+      [
+        276.0,
+        289.0,
+        329.0,
+        358.00000000000006
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.54701,
+        "xyxy": [
+          283.84,
+          296.53,
+          319.95,
+          353.43
+        ]
+      },
+      {
+        "class_id": 0,
+        "confidence": 0.51676,
+        "xyxy": [
+          124.83,
+          11.68,
+          435.27,
+          388.35
+        ]
+      },
+      {
+        "class_id": 1,
+        "confidence": 0.34201,
+        "xyxy": [
+          219.5,
+          387.48,
+          258.49,
+          421.34
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "fire_only:238",
+    "output_image": "train/images/Catargiu_54ecf1d6c24121bd73ffab57.jpg",
+    "category": "fire",
+    "gt_fire_boxes": 1,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.31924,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [
+      [
+        203.0,
+        79.5,
+        418.0,
+        530.5
+      ]
+    ],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.31924,
+        "xyxy": [
+          310.02,
+          79.16,
+          362.48,
+          191.01
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "hard_negative:001",
+    "output_image": "train/images/Catargiu_32c16983afec121b7c062f11.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:004",
+    "output_image": "train/images/Catargiu_00aa037de828fd888dae8105.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:005",
+    "output_image": "train/images/Catargiu_601694590403e0dd002d5cf2.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:006",
+    "output_image": "train/images/Catargiu_57d6574667e9d85cf2362925.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:010",
+    "output_image": "train/images/Catargiu_21ed61d8b3aa62040b2b867e.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.64426,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.64426,
+        "xyxy": [
+          117.7,
+          153.63,
+          169.78,
+          221.34
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "hard_negative:013",
+    "output_image": "train/images/Catargiu_56fc55231c9255a87769dc54.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:015",
+    "output_image": "train/images/Catargiu_657f81224deb93a8afe471a1.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:021",
+    "output_image": "train/images/Catargiu_b159b40227a28635d49bdf9e.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:023",
+    "output_image": "train/images/Catargiu_b359862fceb3129d6beaeb29.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:027",
+    "output_image": "train/images/Catargiu_5682e166a5d504831ef1aa26.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:038",
+    "output_image": "train/images/Catargiu_34b659fc89928c714a5e4853.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:039",
+    "output_image": "train/images/Catargiu_eb82be97d3618eb6eebc629a.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:046",
+    "output_image": "train/images/Catargiu_939d69d616839eb278d48d8d.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:053",
+    "output_image": "train/images/Catargiu_b3a378d367e751c88adf2c46.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:054",
+    "output_image": "train/images/Catargiu_db9754a4f088dd797253d264.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:058",
+    "output_image": "train/images/Catargiu_9db6c73cbd385a72cc9c1929.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 1,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.34828,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": [
+      {
+        "class_id": 1,
+        "confidence": 0.34828,
+        "xyxy": [
+          257.49,
+          576.31,
+          397.43,
+          640.0
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "hard_negative:060",
+    "output_image": "train/images/Catargiu_d0be752582c925fa63ed59c1.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:065",
+    "output_image": "train/images/Catargiu_7b63bd0c000d79fc056e04c0.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:070",
+    "output_image": "train/images/Catargiu_0a14ddea7b96cb3c2cfc89c8.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:072",
+    "output_image": "train/images/Catargiu_9b316d02721a843adf082f1b.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:074",
+    "output_image": "train/images/Catargiu_9589cc648d15feb31ba449e2.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:080",
+    "output_image": "train/images/Catargiu_ae771bb10231f8f0f1f85138.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:083",
+    "output_image": "train/images/Catargiu_2ca3488022ab6ea6ed09d744.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:086",
+    "output_image": "train/images/Catargiu_ca75c963a3e58942aadc17b3.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:088",
+    "output_image": "train/images/Catargiu_f915e8e610ce4fc482c3acf6.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 4,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.43827,
+    "ground_truth": [],
+    "predictions": [
+      {
+        "class_id": 0,
+        "confidence": 0.43827,
+        "xyxy": [
+          84.41,
+          0.79,
+          525.63,
+          299.1
+        ]
+      },
+      {
+        "class_id": 0,
+        "confidence": 0.40625,
+        "xyxy": [
+          263.69,
+          1.02,
+          638.92,
+          244.78
+        ]
+      },
+      {
+        "class_id": 0,
+        "confidence": 0.38227,
+        "xyxy": [
+          84.83,
+          129.94,
+          198.81,
+          286.18
+        ]
+      },
+      {
+        "class_id": 0,
+        "confidence": 0.35857,
+        "xyxy": [
+          0.0,
+          297.01,
+          635.98,
+          532.2
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "hard_negative:090",
+    "output_image": "train/images/Catargiu_e9b6ad60964f8c17c65db32d.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:091",
+    "output_image": "train/images/Catargiu_88dc0dfdbc76ef12d968905d.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 1,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.70899,
+    "ground_truth": [],
+    "predictions": [
+      {
+        "class_id": 0,
+        "confidence": 0.70899,
+        "xyxy": [
+          0.0,
+          0.0,
+          639.5,
+          507.26
+        ]
+      }
+    ]
+  },
+  {
+    "review_id": "hard_negative:093",
+    "output_image": "train/images/Catargiu_c4cf9960728677959d3940c5.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  },
+  {
+    "review_id": "hard_negative:095",
+    "output_image": "train/images/Catargiu_62475355ea74928f2f0df72c.jpg",
+    "category": "background",
+    "gt_fire_boxes": 0,
+    "matched_fire_boxes_iou50": 0,
+    "fire_predictions": 0,
+    "smoke_predictions": 0,
+    "max_fire_conf": 0.0,
+    "max_smoke_conf": 0.0,
+    "ground_truth": [],
+    "predictions": []
+  }
+]

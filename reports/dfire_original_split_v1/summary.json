@@ -1,0 +1,60 @@
+{
+  "input_zip": "F:\\6\\KLTN\\Real_Time_Smoke_Fire_Detection_YOLO\\runtime\\dfire_original_clean_v1.zip",
+  "output_zip": "F:\\6\\KLTN\\Real_Time_Smoke_Fire_Detection_YOLO\\runtime\\dfire_original_clean_split_v1.zip",
+  "seed": 20261110,
+  "target_validation_images": 4244,
+  "class_map": {
+    "0": "smoke",
+    "1": "fire"
+  },
+  "counts": {
+    "train": {
+      "images": 12699,
+      "background": 5885,
+      "smoke_images": 6128,
+      "fire_images": 3350,
+      "smoke_boxes": 6885,
+      "fire_boxes": 8246,
+      "source_AoF": 5024,
+      "fire_only": 686,
+      "smoke_only": 3464,
+      "both": 2664,
+      "source_PublicDataset": 796,
+      "source_WEB": 6879
+    },
+    "val": {
+      "images": 4244,
+      "background": 1948,
+      "smoke_images": 2071,
+      "fire_images": 1120,
+      "smoke_boxes": 2345,
+      "fire_boxes": 2844,
+      "source_AoF": 1643,
+      "smoke_only": 1176,
+      "both": 895,
+      "fire_only": 225,
+      "source_PublicDataset": 258,
+      "source_WEB": 2343
+    },
+    "test": {
+      "images": 4244,
+      "background": 2005,
+      "smoke_images": 2031,
+      "fire_images": 1065,
+      "smoke_boxes": 2253,
+      "fire_boxes": 2740,
+      "source_AoF": 1646,
+      "smoke_only": 1174,
+      "both": 857,
+      "fire_only": 208,
+      "source_PublicDataset": 278,
+      "source_WEB": 2320
+    }
+  },
+  "candidate_edges": 9757,
+  "candidate_groups": 11430,
+  "candidate_groups_touching_test_and_train": 0,
+  "largest_candidate_group": 96,
+  "validation_group_overlap": 0,
+  "method_limit": "ID liền kề và hash cảm nhận chỉ là tín hiệu; chưa kiểm duyệt thủ công toàn bộ cặp cùng cảnh."
+}

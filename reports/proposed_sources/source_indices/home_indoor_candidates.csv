@@ -1,0 +1,6 @@
+home_split,home_image,indoor_image,dhash_distance,phash_distance,candidate_count
+test,images/test_1236.jpg,Indoor_Fire_Smoke/train/images/fire99_jpg.rf.eccf554740834f2807dee73f3de6aa3e.jpg,1,0,1
+train,images/train_1102.jpg,Indoor_Fire_Smoke/train/images/294_harsh_jpg.rf.e72189f2a7fb1751169d138135957de5.jpg,1,4,1
+train,images/train_734.jpg,Indoor_Fire_Smoke/train/images/fire81_jpg.rf.1232b5db2214b77112db6d92bdd9a647.jpg,4,4,1
+val,images/val_493.jpg,Indoor_Fire_Smoke/train/images/fire99_jpg.rf.eccf554740834f2807dee73f3de6aa3e.jpg,5,12,1
+val,images/val_924.jpg,Indoor_Fire_Smoke/train/images/2245_jpg.rf.938148b78dd631f53245ce8291b8ddc0.jpg,6,10,2

@@ -1,0 +1,14 @@
+{
+  "fog_total": 300,
+  "fog_exact_extra_images": 17,
+  "fog_strong_hash_groups": 266,
+  "fog_pair_counts": {
+    "same_byte_pairs": 19,
+    "same_frame_hash_candidates": 22,
+    "near_frame_review_candidates": 1
+  },
+  "fog_joint_locked_candidates": 1,
+  "fire_source_labeled_only": 3999,
+  "fire_joint_locked_candidates": 21,
+  "fire_dhash_le6_locked_candidates": 310
+}

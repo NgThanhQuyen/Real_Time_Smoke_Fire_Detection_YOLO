@@ -1,0 +1,46 @@
+{
+  "splits": {
+    "train": {
+      "images": 8011,
+      "categories": {
+        "fire": 486,
+        "empty": 2820,
+        "both": 2523,
+        "smoke": 2182
+      },
+      "boxes": {
+        "1": 8240,
+        "0": 5399
+      }
+    },
+    "val": {
+      "images": 1371,
+      "categories": {
+        "fire": 70,
+        "both": 430,
+        "smoke": 393,
+        "empty": 478
+      },
+      "boxes": {
+        "1": 1381,
+        "0": 980
+      }
+    },
+    "test": {
+      "images": 4249,
+      "categories": {
+        "empty": 1987,
+        "smoke": 1164,
+        "both": 888,
+        "fire": 210
+      },
+      "boxes": {
+        "0": 2278,
+        "1": 2857
+      }
+    }
+  },
+  "selected": 24,
+  "selected_sha256_valid": true,
+  "val_test_byte_identical": true
+}

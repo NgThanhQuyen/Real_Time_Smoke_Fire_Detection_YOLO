@@ -1,0 +1,19 @@
+{
+  "source_fire_only": 2165,
+  "counts": {
+    "not_prioritized_after_overview": 2144,
+    "needs_relabel_or_review": 10,
+    "dfire_same_frame": 5,
+    "recommended_realistic": 3,
+    "optional_controlled": 2,
+    "invalid_box": 1
+  },
+  "proposed_total_including_controlled": 5,
+  "proposed_fire_boxes": 8,
+  "proposed_source_splits": {
+    "train": 5
+  },
+  "dfire_train_fire_only_before": 686,
+  "dfire_train_fire_only_if_all_proposed_added": 691,
+  "dfire_val_test_unchanged": true
+}

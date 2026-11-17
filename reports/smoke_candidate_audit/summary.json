@@ -1,0 +1,41 @@
+{
+  "raw_smoke_images": {
+    "D-Fire clean": 7558,
+    "AIForMankind V2": 2191,
+    "Indoor Fire Smoke": 2835,
+    "MyData Fire": 7020
+  },
+  "unique_sha_candidates": {
+    "D-Fire clean": 7558,
+    "AIForMankind V2": 2190,
+    "Indoor Fire Smoke": 2835,
+    "MyData Fire": 5858
+  },
+  "exact_duplicates_removed": 1163,
+  "exact_overlap_existing": 0,
+  "screen_exclusions": {
+    "D-Fire clean | dfire_nontrain_split": 2875,
+    "Indoor Fire Smoke | same_stem_existing_val_test": 37,
+    "MyData Fire | same_stem_existing_val_test": 106
+  },
+  "structural_candidates": {
+    "D-Fire clean | both": 2523,
+    "D-Fire clean | smoke_only": 2160,
+    "AIForMankind V2 | smoke_only": 2190,
+    "Indoor Fire Smoke | smoke_only": 2346,
+    "Indoor Fire Smoke | both": 452,
+    "MyData Fire | both": 2557,
+    "MyData Fire | smoke_only": 3195
+  },
+  "structural_candidate_total": 15423,
+  "notes": [
+    "Ứng viên theo nhãn, SHA và tên gốc; chưa kiểm duyệt toàn bộ ảnh/nhãn hoặc đối chiếu mọi cảnh bằng mắt.",
+    "Không sửa dữ liệu hiện có hoặc nhập ảnh vào train."
+  ],
+  "label_conflict_exact_image_groups": 1154,
+  "candidates_without_known_label_conflict": 14269,
+  "candidates_without_known_label_conflict_by_category": {
+    "both": 5333,
+    "smoke_only": 8936
+  }
+}

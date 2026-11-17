@@ -1,0 +1,166 @@
+{
+  "run_id": "yolo11n_V6_20261014_014747",
+  "model_arch": "yolo11n",
+  "dataset_version": "V6",
+  "dataset_root": "/kaggle/input/datasets/quynnguynthanh/finalsfd-yolo-dataset-v6",
+  "timestamp": "2026-10-14T08:53:20.053824",
+  "ultralytics_version": "8.4.177",
+  "python_version": "3.13.15",
+  "class_names": [
+    "khoi",
+    "lua"
+  ],
+  "train_config": {
+    "data": "/kaggle/working/data.yaml",
+    "epochs": 200,
+    "imgsz": 832,
+    "batch": 32,
+    "patience": 20,
+    "optimizer": "AdamW",
+    "lr0": 0.001,
+    "cos_lr": true,
+    "box": 7.5,
+    "cls": 0.57,
+    "dfl": 1.5,
+    "iou": 0.6,
+    "flipud": 0.0,
+    "degrees": 0.0,
+    "fliplr": 0.5,
+    "scale": 0.5,
+    "hsv_h": 0.015,
+    "hsv_s": 0.7,
+    "hsv_v": 0.4,
+    "mosaic": 1.0,
+    "close_mosaic": 15,
+    "mixup": 0.1,
+    "cutmix": 0.1,
+    "project": "/kaggle/working/runs/detect",
+    "name": "yolo11n_V6_20261014_014747",
+    "plots": true,
+    "save_json": true,
+    "seed": 42
+  },
+  "iou_threshold_used": 0.6,
+  "class_imbalance_ratio_train": 1.5694,
+  "dataset_split_counts": {
+    "train": {
+      "so_anh": 10902,
+      "so_nhan": 10902
+    },
+    "val": {
+      "so_anh": 2170,
+      "so_nhan": 2170
+    },
+    "test": {
+      "so_anh": 2123,
+      "so_nhan": 2123
+    }
+  },
+  "best_epoch": 112,
+  "metrics": {
+    "val": {
+      "precision": 0.794,
+      "recall": 0.7052,
+      "mAP50": 0.7825,
+      "mAP50_95": 0.4489
+    },
+    "test": {
+      "precision": 0.7683,
+      "recall": 0.6796,
+      "mAP50": 0.7492,
+      "mAP50_95": 0.4226
+    },
+    "test_per_class": [
+      {
+        "Class": "khoi",
+        "Precision": 0.8155,
+        "Recall": 0.7379,
+        "F1-score": 0.7748,
+        "mAP50": 0.802,
+        "mAP50-95": 0.4874
+      },
+      {
+        "Class": "lua",
+        "Precision": 0.721,
+        "Recall": 0.6212,
+        "F1-score": 0.6674,
+        "mAP50": 0.6965,
+        "mAP50-95": 0.3578
+      },
+      {
+        "Class": "ALL (mean)",
+        "Precision": 0.7683,
+        "Recall": 0.6796,
+        "F1-score": 0.7212,
+        "mAP50": 0.7492,
+        "mAP50-95": 0.4226
+      }
+    ],
+    "test_with_tta": {
+      "precision": 0.748,
+      "recall": 0.696,
+      "mAP50": 0.7492,
+      "mAP50_95": 0.4285,
+      "thoi_gian_giay": 36.7
+    },
+    "test_without_tta": {
+      "precision": 0.7683,
+      "recall": 0.6796,
+      "mAP50": 0.7492,
+      "mAP50_95": 0.4226,
+      "thoi_gian_giay": 21.0
+    },
+    "iou_sensitivity": [
+      {
+        "Nguong_IoU": 0.3,
+        "Precision": 0.7687,
+        "Recall": 0.6849,
+        "mAP50": 0.7279,
+        "mAP50-95": 0.4023
+      },
+      {
+        "Nguong_IoU": 0.4,
+        "Precision": 0.7644,
+        "Recall": 0.6867,
+        "mAP50": 0.7424,
+        "mAP50-95": 0.4098
+      },
+      {
+        "Nguong_IoU": 0.5,
+        "Precision": 0.7627,
+        "Recall": 0.6886,
+        "mAP50": 0.7499,
+        "mAP50-95": 0.4169
+      },
+      {
+        "Nguong_IoU": 0.6,
+        "Precision": 0.7683,
+        "Recall": 0.6796,
+        "mAP50": 0.7492,
+        "mAP50-95": 0.4226
+      },
+      {
+        "Nguong_IoU": 0.7,
+        "Precision": 0.7623,
+        "Recall": 0.6757,
+        "mAP50": 0.7416,
+        "mAP50-95": 0.4247
+      },
+      {
+        "Nguong_IoU": 0.8,
+        "Precision": 0.7489,
+        "Recall": 0.6644,
+        "mAP50": 0.7245,
+        "mAP50-95": 0.4219
+      }
+    ]
+  },
+  "artifacts": {
+    "best_model_pt": "smoke_fire_yolo11n_V6_20261014_014747_best.pt",
+    "last_model_pt": "smoke_fire_yolo11n_V6_20261014_014747_last.pt",
+    "onnx_model": "smoke_fire_yolo11n_V6_20261014_014747_best.onnx",
+    "labelmap": "labelmap.json",
+    "inference_example": "inference_example.py",
+    "data_yaml": "data.yaml"
+  }
+}

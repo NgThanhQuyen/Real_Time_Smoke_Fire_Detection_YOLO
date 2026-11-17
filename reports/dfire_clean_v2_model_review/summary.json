@@ -1,0 +1,14 @@
+{
+  "aof_test_images": 1607,
+  "background_images": 971,
+  "background_with_any_prediction": 279,
+  "background_with_smoke_prediction": 242,
+  "smoke_positive_images": 537,
+  "smoke_positive_images_without_iou50_match": 410,
+  "categories": {
+    "background": 971,
+    "smoke_only": 396,
+    "both": 141,
+    "fire_only": 99
+  }
+}

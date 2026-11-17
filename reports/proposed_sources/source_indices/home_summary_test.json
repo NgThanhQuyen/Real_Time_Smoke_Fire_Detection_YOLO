@@ -1,0 +1,9 @@
+{
+  "test": {
+    "images": 1300,
+    "fire_boxes": 897,
+    "smoke_boxes": 689,
+    "empty": 15,
+    "issues": 0
+  }
+}

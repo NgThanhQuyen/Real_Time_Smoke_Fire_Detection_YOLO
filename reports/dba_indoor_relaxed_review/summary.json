@@ -1,0 +1,36 @@
+{
+  "DBA-Fire": {
+    "source_images": 3905,
+    "eligible": 3864,
+    "eligible_by_category": {
+      "fire_only": 2093,
+      "both": 1072,
+      "smoke_only": 699
+    },
+    "excluded_by_reason": {
+      "ssim_over_90_locked": 41
+    },
+    "source_by_category": {
+      "fire_only": 2134,
+      "both": 1072,
+      "smoke_only": 699
+    }
+  },
+  "Indoor": {
+    "source_images": 5000,
+    "eligible": 4996,
+    "eligible_by_category": {
+      "fire_only": 2162,
+      "smoke_only": 2376,
+      "both": 458
+    },
+    "excluded_by_reason": {
+      "ssim_over_90_locked": 4
+    },
+    "source_by_category": {
+      "fire_only": 2165,
+      "smoke_only": 2376,
+      "both": 459
+    }
+  }
+}

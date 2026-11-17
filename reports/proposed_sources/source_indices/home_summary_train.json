@@ -1,0 +1,9 @@
+{
+  "train": {
+    "images": 3900,
+    "fire_boxes": 2978,
+    "smoke_boxes": 1834,
+    "empty": 87,
+    "issues": 0
+  }
+}

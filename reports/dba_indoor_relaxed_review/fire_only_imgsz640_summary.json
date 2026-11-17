@@ -1,0 +1,200 @@
+{
+  "DBA-Fire": {
+    "images": 2093,
+    "long_edge_ge_640": 786,
+    "long_edge_lt_640": 1307,
+    "both_edges_ge_640": 335,
+    "exact_640_square": 1,
+    "long_edge_bands": {
+      "320-639": 763,
+      "640-959": 428,
+      "960-1279": 191,
+      "<320": 544,
+      ">=1280": 167
+    },
+    "common_resolutions": [
+      {
+        "resolution": "275x183",
+        "images": 103
+      },
+      {
+        "resolution": "1920x1080",
+        "images": 81
+      },
+      {
+        "resolution": "300x168",
+        "images": 70
+      },
+      {
+        "resolution": "259x194",
+        "images": 59
+      },
+      {
+        "resolution": "500x333",
+        "images": 39
+      },
+      {
+        "resolution": "500x375",
+        "images": 31
+      },
+      {
+        "resolution": "299x168",
+        "images": 28
+      },
+      {
+        "resolution": "1365x1024",
+        "images": 25
+      },
+      {
+        "resolution": "183x275",
+        "images": 20
+      },
+      {
+        "resolution": "500x334",
+        "images": 19
+      },
+      {
+        "resolution": "900x600",
+        "images": 19
+      },
+      {
+        "resolution": "640x480",
+        "images": 17
+      }
+    ],
+    "any_fire_box_short_edge_ge_16": 2090,
+    "any_fire_box_short_edge_ge_32": 2021
+  },
+  "Indoor": {
+    "images": 2162,
+    "long_edge_ge_640": 1805,
+    "long_edge_lt_640": 357,
+    "both_edges_ge_640": 1559,
+    "exact_640_square": 935,
+    "long_edge_bands": {
+      "640-959": 1181,
+      "320-639": 240,
+      ">=1280": 617,
+      "<320": 117,
+      "960-1279": 7
+    },
+    "common_resolutions": [
+      {
+        "resolution": "640x640",
+        "images": 935
+      },
+      {
+        "resolution": "1280x720",
+        "images": 416
+      },
+      {
+        "resolution": "854x480",
+        "images": 170
+      },
+      {
+        "resolution": "720x1280",
+        "images": 116
+      },
+      {
+        "resolution": "224x224",
+        "images": 110
+      },
+      {
+        "resolution": "360x178",
+        "images": 71
+      },
+      {
+        "resolution": "360x176",
+        "images": 64
+      },
+      {
+        "resolution": "1920x1080",
+        "images": 60
+      },
+      {
+        "resolution": "416x416",
+        "images": 51
+      },
+      {
+        "resolution": "640x360",
+        "images": 40
+      },
+      {
+        "resolution": "480x320",
+        "images": 28
+      },
+      {
+        "resolution": "478x358",
+        "images": 26
+      }
+    ],
+    "any_fire_box_short_edge_ge_16": 2115,
+    "any_fire_box_short_edge_ge_32": 1989
+  },
+  "Tổng": {
+    "images": 4255,
+    "long_edge_ge_640": 2591,
+    "long_edge_lt_640": 1664,
+    "both_edges_ge_640": 1894,
+    "exact_640_square": 936,
+    "long_edge_bands": {
+      "320-639": 1003,
+      "640-959": 1609,
+      "960-1279": 198,
+      "<320": 661,
+      ">=1280": 784
+    },
+    "common_resolutions": [
+      {
+        "resolution": "640x640",
+        "images": 936
+      },
+      {
+        "resolution": "1280x720",
+        "images": 431
+      },
+      {
+        "resolution": "854x480",
+        "images": 170
+      },
+      {
+        "resolution": "1920x1080",
+        "images": 141
+      },
+      {
+        "resolution": "720x1280",
+        "images": 116
+      },
+      {
+        "resolution": "224x224",
+        "images": 110
+      },
+      {
+        "resolution": "275x183",
+        "images": 105
+      },
+      {
+        "resolution": "360x178",
+        "images": 71
+      },
+      {
+        "resolution": "300x168",
+        "images": 70
+      },
+      {
+        "resolution": "360x176",
+        "images": 64
+      },
+      {
+        "resolution": "259x194",
+        "images": 62
+      },
+      {
+        "resolution": "640x360",
+        "images": 52
+      }
+    ],
+    "any_fire_box_short_edge_ge_16": 4205,
+    "any_fire_box_short_edge_ge_32": 4010
+  }
+}

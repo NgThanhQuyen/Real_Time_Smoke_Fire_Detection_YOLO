@@ -1,0 +1,13 @@
+source,candidate,locked_image,dhash_distance,phash_distance
+MyData Fire,test/images/fire11frame51_jpg.rf.c766a56551e4d8d984f8e1f3fab7285f.jpg,valid/images/Img_1323_jpg.rf.68709d6e60c01a824d95681bf0a9970d.jpg,2,0
+MyData Fire,test/images/fire11frame51_jpg.rf.c766a56551e4d8d984f8e1f3fab7285f.jpg,valid/images/Img_1323_jpg.rf.f2c995fd05e90b8d74dca104adf337a2.jpg,2,0
+MyData Fire,test/images/fire11frame51_jpg.rf.c766a56551e4d8d984f8e1f3fab7285f.jpg,valid/images/Img_1322_jpg.rf.1db4859d6399ff6f836f6534c48f0d7f.jpg,2,2
+MyData Fire,test/images/fire11frame51_jpg.rf.c766a56551e4d8d984f8e1f3fab7285f.jpg,test/images/Img_1322_jpg.rf.d4c7b0e959464658230e21f0a8d1e55a.jpg,2,2
+MyData Fire,test/images/fire11frame51_jpg.rf.c766a56551e4d8d984f8e1f3fab7285f.jpg,test/images/Img_1333_jpg.rf.dfae8f74930a8e9bb4b6bca86cd9c7dc.jpg,4,2
+MyData Fire,test/images/fire11frame51_jpg.rf.c766a56551e4d8d984f8e1f3fab7285f.jpg,valid/images/Img_1337_jpg.rf.9fd021c528c4e7bca9edae80870dff53.jpg,6,2
+MyData Fire,test/images/fire11frame51_jpg.rf.c766a56551e4d8d984f8e1f3fab7285f.jpg,valid/images/Img_1340_jpg.rf.25cd316a89f74ae0a526c9111d1c1e12.jpg,6,2
+MyData Fire,test/images/fire11frame51_jpg.rf.c766a56551e4d8d984f8e1f3fab7285f.jpg,valid/images/Img_1342_jpg.rf.a9cc1112d47056331fdf9309ff8cef3a.jpg,6,2
+MyData Fire,test/images/fire11frame51_jpg.rf.c766a56551e4d8d984f8e1f3fab7285f.jpg,valid/images/Img_1344_jpg.rf.23c9f25871159d539af47c417c2ef5c2.jpg,6,4
+MyData Fire,test/images/fire11frame51_jpg.rf.c766a56551e4d8d984f8e1f3fab7285f.jpg,test/images/Img_1344_jpg.rf.58506233e5fb6788737f65f89510f072.jpg,6,4
+MyData Fire,test/images/fire11frame51_jpg.rf.c766a56551e4d8d984f8e1f3fab7285f.jpg,test/images/Img_1344_jpg.rf.6f079d8b1171408fb5e511cf9fa3b6ee.jpg,6,4
+MyData Fire,test/images/fire11frame51_jpg.rf.c766a56551e4d8d984f8e1f3fab7285f.jpg,valid/images/Img_1346_jpg.rf.e6f4cbfd4060c9d35d63cb904babb874.jpg,6,6

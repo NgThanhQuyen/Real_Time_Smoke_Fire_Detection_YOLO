@@ -1,0 +1,24 @@
+{
+  "output_zip": "F:\\6\\KLTN\\Real_Time_Smoke_Fire_Detection_YOLO\\runtime\\dfire_original_clean_split_fire2591_v1.zip",
+  "source_images": {
+    "DBA-Fire": 786,
+    "Indoor": 1805
+  },
+  "added_images": 2591,
+  "added_fire_boxes": 3823,
+  "clipped_boxes": 8,
+  "clipped_images": 8,
+  "splits": {
+    "train": 15290,
+    "val": 4244,
+    "test": 4244
+  },
+  "train_categories": {
+    "fire_only": 3277,
+    "smoke_only": 3464,
+    "both": 2664,
+    "background": 5885
+  },
+  "val_test_members_verified_sha256": 16976,
+  "archive_crc_verified": true
+}

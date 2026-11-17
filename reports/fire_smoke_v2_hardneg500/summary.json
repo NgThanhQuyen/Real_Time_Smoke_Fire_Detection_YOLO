@@ -1,0 +1,22 @@
+{
+  "base_zip": "F:\\6\\KLTN\\Real_Time_Smoke_Fire_Detection_YOLO\\runtime\\Smoke-Fire-Detection-Dataset.zip",
+  "output_zip": "F:\\6\\KLTN\\Real_Time_Smoke_Fire_Detection_YOLO\\runtime\\Smoke-Fire-Detection-Dataset-hardneg500.zip",
+  "added_by_category": {
+    "rain": 180,
+    "fog": 220,
+    "warm_light": 100
+  },
+  "image_counts": {
+    "train": 14269,
+    "test": 1684,
+    "valid": 1684
+  },
+  "original_member_count": 34276,
+  "original_members_content_unchanged": true,
+  "new_labels_empty": true,
+  "exact_duplicate_candidates": 0,
+  "crc_ok": true,
+  "review_note": "Ảnh ứng viên đã được xem qua bảng ảnh; chưa duyệt 500 ảnh ở kích thước gốc.",
+  "original_members_sha256_equal": true,
+  "added_images_decoded": 500
+}

@@ -1,0 +1,62 @@
+# Virtual environment & Dependencies
+.venv/
+venv/
+ENV/
+env/
+node_modules/
+frontend/node_modules/
+
+# Environment variables & secrets
+.env
+.env.*
+!.env.example
+runtime/app.key
+*.pem
+*.key
+*.token
+
+# Runtime data & SQLite databases
+runtime/
+*.db
+*.sqlite
+*.sqlite3
+
+# Agent skills & assistant tooling
+.agents/
+.gemini/
+AGENTS.md
+codex.md
+PROJECT_CONTEXT.md
+docs/
+
+# Build outputs, temp & caches
+__pycache__/
+*.pyc
+.pytest_cache/
+frontend/dist/
+frontend/*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts
+.cache/
+tmp/
+temp/
+Ultralytics/
+reports/.build/
+*.zip
+
+# Model Checkpoints & Large Artifacts
+best.pt
+*.pt
+*.pth
+*.onnx
+
+# Video media
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini

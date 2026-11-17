@@ -1,0 +1,28 @@
+{
+  "starting_dataset": "runtime/fire_smoke_detection_yolov11_bg_dfire2000_v1",
+  "destination_split_if_selected": "train",
+  "counts": {
+    "smoke_only": {
+      "available_after_review": 176,
+      "already_present_exact": 2000
+    },
+    "both": {
+      "available_after_review": 2525,
+      "exclude_same_scene_locked_split": 5,
+      "label_needs_correction": 1
+    },
+    "background": {
+      "already_present_exact": 1204,
+      "available_after_review": 1493,
+      "exclude_same_scene_locked_split": 52
+    }
+  },
+  "notes": [
+    "Ảnh trùng 100% được xác định bằng SHA-256 trên byte ảnh.",
+    "Ảnh cùng cảnh valid/test được loại sau khi duyệt ảnh ghép bằng mắt, kể cả khác byte.",
+    "Chỉ khảo sát D-Fire clean v2 train và 51 khung train bị loại trước vì gần giống trong train.",
+    "Một nhãn của ảnh cả lửa lẫn khói có box vượt biên, cần sửa trước khi dùng.",
+    "Sàng lọc perceptual hash không chứng minh tuyệt đối rằng mọi cảnh trùng đã được phát hiện.",
+    "Chưa thay đổi bộ dữ liệu hoặc chọn số ảnh để bổ sung."
+  ]
+}

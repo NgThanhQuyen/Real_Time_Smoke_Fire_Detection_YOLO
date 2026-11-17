@@ -1,0 +1,64 @@
+{
+  "checkpoint": "C:\\Users\\User\\Downloads\\dfire_clean_v2_yolo11n_best.pt",
+  "confidence": 0.25,
+  "video_sampling_fps": 5,
+  "image_fire_count": 75,
+  "image_negative_count": 29,
+  "fire_images_with_fire_prediction": 62,
+  "fire_gt_boxes": 83,
+  "fire_gt_boxes_matched_iou50": 59,
+  "fire_images_with_smoke_prediction": 5,
+  "negative_images_with_any_prediction": 4,
+  "negative_images_with_fire_prediction": 2,
+  "negative_images_with_smoke_prediction": 2,
+  "videos": {
+    "test_1.mp4": {
+      "sampled_frames": 48,
+      "frames_with_any_prediction": 46,
+      "frames_with_fire": 46,
+      "frames_with_smoke": 35,
+      "max_fire_conf": 0.86636,
+      "max_smoke_conf": 0.79809
+    },
+    "test_2.mp4": {
+      "sampled_frames": 57,
+      "frames_with_any_prediction": 57,
+      "frames_with_fire": 53,
+      "frames_with_smoke": 57,
+      "max_fire_conf": 0.86141,
+      "max_smoke_conf": 0.8638
+    },
+    "test_3.mp4": {
+      "sampled_frames": 60,
+      "frames_with_any_prediction": 3,
+      "frames_with_fire": 0,
+      "frames_with_smoke": 3,
+      "max_fire_conf": 0.0,
+      "max_smoke_conf": 0.3625
+    },
+    "test_4.mp4": {
+      "sampled_frames": 65,
+      "frames_with_any_prediction": 35,
+      "frames_with_fire": 0,
+      "frames_with_smoke": 35,
+      "max_fire_conf": 0.0,
+      "max_smoke_conf": 0.80324
+    },
+    "test_5.mp4": {
+      "sampled_frames": 50,
+      "frames_with_any_prediction": 6,
+      "frames_with_fire": 0,
+      "frames_with_smoke": 6,
+      "max_fire_conf": 0.0,
+      "max_smoke_conf": 0.48033
+    },
+    "test_6.mp4": {
+      "sampled_frames": 61,
+      "frames_with_any_prediction": 61,
+      "frames_with_fire": 61,
+      "frames_with_smoke": 61,
+      "max_fire_conf": 0.73269,
+      "max_smoke_conf": 0.80531
+    }
+  }
+}

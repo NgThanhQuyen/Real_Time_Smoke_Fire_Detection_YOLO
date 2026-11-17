@@ -1,0 +1,6 @@
+﻿indoor,dfire,dfire_split,dhash_distance,phash_distance
+Indoor_Fire_Smoke/test/images/FIR_LKC_ART_01_Detectingfire_bedroomfire_jpg.rf.1af8e719d04877ac95a69f7971348c1c.jpg,PublicDataset01326.jpg,test,0,0
+Indoor_Fire_Smoke/train/images/2CDDD98D00000578-3246257-image-a-30_1443454943645_jpg.rf.89ff878fdc26eba2941b5eaf3a6cf830.jpg,PublicDataset01007.jpg,train,0,0
+Indoor_Fire_Smoke/train/images/FIR_LKC_ART_01_Detectingfire_bedroomfire_jpg.rf.780099fa8d8559aa6c89a86fcfe6d352.jpg,PublicDataset01326.jpg,test,0,0
+Indoor_Fire_Smoke/valid/images/19_jpg.rf.cd49a023bc38592ed97208b3d3561979.jpg,PublicDataset01006.jpg,train,0,0
+Indoor_Fire_Smoke/valid/images/FIR_LKC_ART_01_Detectingfire_bedroomfire_jpg.rf.0d41b502d2cdc69d58dc466f4550eacd.jpg,PublicDataset01326.jpg,test,0,0

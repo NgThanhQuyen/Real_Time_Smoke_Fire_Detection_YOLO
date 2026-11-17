@@ -1,0 +1,14 @@
+{
+  "fog": 300,
+  "cloud": 1080,
+  "cloud_cameras": {
+    "wilson-s-mobo-c": 180,
+    "sjh-s-mobo-c": 180,
+    "sjh-n-mobo-c": 180,
+    "dwpgm-w-mobo-c": 180,
+    "wilson-e-mobo-c": 180,
+    "syp-w-mobo-c": 180
+  },
+  "exact_hash_locked_candidates": 0,
+  "joint_hash_locked_candidates": 1
+}

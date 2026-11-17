@@ -1,0 +1,163 @@
+{
+  "checkpoint": "dfire_clean_v2_yolo11n_best.pt",
+  "ultralytics_version": "8.4.118",
+  "imgsz": 640,
+  "conf": 0.25,
+  "iou": 0.7,
+  "smoother": {
+    "window_ms": 1500,
+    "trigger_ratio": 0.6,
+    "release_ratio": 0.25,
+    "min_event_ms": 700,
+    "merge_gap_ms": 1000
+  },
+  "videos": [
+    {
+      "file": "test_1.mp4",
+      "frames": 288,
+      "fps": 30.0,
+      "duration_s": 9.6,
+      "frames_any_detection": 273,
+      "frames_smoke": 205,
+      "frames_fire": 272,
+      "max_conf_smoke": 0.8411,
+      "max_conf_fire": 0.8753,
+      "events": [
+        {
+          "class_id": 0,
+          "start_s": 0.0,
+          "end_s": 5.1,
+          "peak_conf": 0.6759,
+          "peak_frame": 120
+        },
+        {
+          "class_id": 1,
+          "start_s": 0.0,
+          "end_s": 9.57,
+          "peak_conf": 0.8753,
+          "peak_frame": 137
+        },
+        {
+          "class_id": 0,
+          "start_s": 7.23,
+          "end_s": 9.57,
+          "peak_conf": 0.8411,
+          "peak_frame": 287
+        }
+      ]
+    },
+    {
+      "file": "test_2.mp4",
+      "frames": 340,
+      "fps": 30.0,
+      "duration_s": 11.33,
+      "frames_any_detection": 340,
+      "frames_smoke": 340,
+      "frames_fire": 313,
+      "max_conf_smoke": 0.8711,
+      "max_conf_fire": 0.8863,
+      "events": [
+        {
+          "class_id": 0,
+          "start_s": 0.0,
+          "end_s": 11.3,
+          "peak_conf": 0.8711,
+          "peak_frame": 161
+        },
+        {
+          "class_id": 1,
+          "start_s": 0.0,
+          "end_s": 11.3,
+          "peak_conf": 0.8863,
+          "peak_frame": 32
+        }
+      ]
+    },
+    {
+      "file": "test_3.mp4",
+      "frames": 296,
+      "fps": 25.0,
+      "duration_s": 11.84,
+      "frames_any_detection": 14,
+      "frames_smoke": 14,
+      "frames_fire": 0,
+      "max_conf_smoke": 0.3897,
+      "max_conf_fire": 0.0,
+      "events": []
+    },
+    {
+      "file": "test_4.mp4",
+      "frames": 325,
+      "fps": 25.0,
+      "duration_s": 13.0,
+      "frames_any_detection": 170,
+      "frames_smoke": 170,
+      "frames_fire": 0,
+      "max_conf_smoke": 0.8032,
+      "max_conf_fire": 0.0,
+      "events": [
+        {
+          "class_id": 0,
+          "start_s": 1.92,
+          "end_s": 5.48,
+          "peak_conf": 0.6581,
+          "peak_frame": 75
+        },
+        {
+          "class_id": 0,
+          "start_s": 6.92,
+          "end_s": 12.96,
+          "peak_conf": 0.6852,
+          "peak_frame": 287
+        }
+      ]
+    },
+    {
+      "file": "test_5.mp4",
+      "frames": 250,
+      "fps": 25.0,
+      "duration_s": 10.0,
+      "frames_any_detection": 35,
+      "frames_smoke": 35,
+      "frames_fire": 0,
+      "max_conf_smoke": 0.4803,
+      "max_conf_fire": 0.0,
+      "events": [
+        {
+          "class_id": 0,
+          "start_s": 4.08,
+          "end_s": 6.16,
+          "peak_conf": 0.4803,
+          "peak_frame": 140
+        }
+      ]
+    },
+    {
+      "file": "test_6.mp4",
+      "frames": 303,
+      "fps": 25.0,
+      "duration_s": 12.12,
+      "frames_any_detection": 303,
+      "frames_smoke": 303,
+      "frames_fire": 303,
+      "max_conf_smoke": 0.8061,
+      "max_conf_fire": 0.7384,
+      "events": [
+        {
+          "class_id": 0,
+          "start_s": 0.0,
+          "end_s": 12.08,
+          "peak_conf": 0.8061,
+          "peak_frame": 89
+        },
+        {
+          "class_id": 1,
+          "start_s": 0.0,
+          "end_s": 12.08,
+          "peak_conf": 0.7384,
+          "peak_frame": 72
+        }
+      ]
+    }
+  ]
+}

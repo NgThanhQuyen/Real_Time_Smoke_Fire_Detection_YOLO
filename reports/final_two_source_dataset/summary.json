@@ -1,0 +1,67 @@
+{
+  "zip": "F:\\6\\KLTN\\Real_Time_Smoke_Fire_Detection_YOLO\\runtime\\fire_smoke_dfire_final.zip",
+  "total_images": 16661,
+  "splits": {
+    "test": 1666,
+    "train": 13329,
+    "valid": 1666
+  },
+  "categories": {
+    "train": {
+      "smoke_only": 3850,
+      "both": 1514,
+      "fire_only": 5965,
+      "background": 2000
+    },
+    "valid": {
+      "smoke_only": 403,
+      "both": 268,
+      "fire_only": 667,
+      "background": 328
+    },
+    "test": {
+      "smoke_only": 189,
+      "both": 482,
+      "fire_only": 453,
+      "background": 542
+    }
+  },
+  "sources": {
+    "train": {
+      "Fire-Smoke-Detection-Yolov11": 9153,
+      "D-Fire": 4176
+    },
+    "valid": {
+      "Fire-Smoke-Detection-Yolov11": 871,
+      "D-Fire": 795
+    },
+    "test": {
+      "Fire-Smoke-Detection-Yolov11": 435,
+      "D-Fire": 1231
+    }
+  },
+  "sha256_unique": true,
+  "label_mapping": {
+    "0": "Fire",
+    "1": "Smoke"
+  },
+  "selection_seed": 20261108,
+  "quota_new": {
+    "train": {
+      "smoke_only": 176,
+      "background": 796
+    },
+    "valid": {
+      "fire_only": 70,
+      "smoke_only": 276,
+      "both": 121,
+      "background": 228
+    },
+    "test": {
+      "fire_only": 179,
+      "smoke_only": 110,
+      "both": 400,
+      "background": 442
+    }
+  }
+}
