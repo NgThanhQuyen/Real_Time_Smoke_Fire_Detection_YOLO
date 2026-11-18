@@ -1,18 +1,33 @@
 from __future__ import annotations
 
 import os
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
 from dotenv import load_dotenv
 
+# Đảm bảo PyTorch DLL và OpenMP được khởi tạo đúng trên Windows trước khi bất kỳ module nào nạp OpenCV (cv2)
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+_torch_lib = Path(sys.prefix) / "Lib" / "site-packages" / "torch" / "lib"
+if _torch_lib.is_dir() and hasattr(os, "add_dll_directory"):
+    try:
+        os.add_dll_directory(str(_torch_lib))
+    except Exception:
+        pass
+try:
+    import torch  # nạp sớm c10.dll tránh WinError 1114
+except Exception:
+    pass
 
 ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(ROOT / ".env")
 RUNTIME = ROOT / "runtime"
+os.environ.setdefault("YOLO_CONFIG_DIR", str(RUNTIME / "ultralytics"))
+(RUNTIME / "ultralytics").mkdir(parents=True, exist_ok=True)
 DATABASE_PATH = RUNTIME / "db" / "app.sqlite3"
-INITIAL_MODEL_RELATIVE = "models/yolo11n-v6/best.pt"
-INITIAL_MODEL_DIR = ROOT / "models" / "yolo11n-v6"
+INITIAL_MODEL_RELATIVE = "models/final_sfd_yolo11n/best.pt"
+INITIAL_MODEL_DIR = ROOT / "models" / "final_sfd_yolo11n"
 
 
 @dataclass(frozen=True)
@@ -32,6 +47,9 @@ class Settings:
     event_merge_gap_seconds: float = float(os.getenv("EVENT_MERGE_GAP_SECONDS", "1.0"))
     ffmpeg_path: str = os.getenv("FFMPEG_PATH", "")
     app_encryption_key: str = os.getenv("APP_ENCRYPTION_KEY", "")
+    mlflow_tracking_uri: str = os.getenv("MLFLOW_TRACKING_URI", "")
+    mlflow_tracking_username: str = os.getenv("MLFLOW_TRACKING_USERNAME", "")
+    mlflow_tracking_password: str = os.getenv("MLFLOW_TRACKING_PASSWORD", "")
 
 
 settings = Settings()

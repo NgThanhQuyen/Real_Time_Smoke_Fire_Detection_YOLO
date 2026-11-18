@@ -1,5 +1,22 @@
 from __future__ import annotations
 
+import os
+import sys
+from pathlib import Path
+
+# Khởi tạo đường dẫn DLL của PyTorch và thiết lập OpenMP ngay đầu tiến trình
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+_torch_lib = Path(sys.prefix) / "Lib" / "site-packages" / "torch" / "lib"
+if _torch_lib.is_dir() and hasattr(os, "add_dll_directory"):
+    try:
+        os.add_dll_directory(str(_torch_lib))
+    except Exception:
+        pass
+try:
+    import torch
+except Exception:
+    pass
+
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request

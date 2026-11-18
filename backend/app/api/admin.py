@@ -12,7 +12,7 @@ import cv2
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile, status
 from fastapi.responses import FileResponse
 from sqlalchemy import func, select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from ..config import RUNTIME, runtime_file
 from ..db import get_db
@@ -34,13 +34,17 @@ from ..models import (
     User,
     UserProfile,
     VideoJob,
+    BenchmarkRun,
     new_id,
     utcnow,
 )
 from ..security import hash_password, require_role
-from ..serializers import event_data, feedback_data, iso, job_data, model_data, user_data
+from ..serializers import benchmark_data, event_data, feedback_data, iso, job_data, model_data, user_data
 from ..serializers import realtime_event_data, realtime_session_data
-from .schemas import FeedbackReviewInput, ModelActivateInput, UserUpdateInput
+from ..mlflow_service import check_mlflow_connection, import_run_model, list_remote_runs
+from ..benchmark_service import compare_benchmarks_metrics, get_dataset_status, start_benchmark
+from .schemas import BenchmarkRunInput, FeedbackReviewInput, MlflowImportInput, ModelActivateInput, UserUpdateInput
+
 
 
 ops = APIRouter(prefix="/api/admin", tags=["admin-ops"])
@@ -311,13 +315,7 @@ def list_models(
     return [model_data(item) for item in items]
 
 
-@ops.post("/models/{model_id}/activate")
-def activate_model(
-    model_id: str,
-    payload: ModelActivateInput,
-    actor: User = Depends(require_role("admin_ops")),
-    db: Session = Depends(get_db),
-):
+def execute_model_activation(db: Session, model_id: str, actor_id: str, reason: str = "") -> ModelVersion:
     target = db.get(ModelVersion, model_id)
     if not target or target.status not in {"candidate", "retired"}:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Mô hình không ở trạng thái có thể kích hoạt")
@@ -335,9 +333,42 @@ def activate_model(
         item.status = "retired"
     target.status = "active"
     target.activated_at = utcnow()
-    audit(db, actor.id, "model_activated", "model_version", target.id, {"reason": payload.reason})
+    audit(db, actor_id, "model_activated", "model_version", target.id, {"reason": reason or "Kích hoạt mô hình"})
     db.commit()
+    return target
+
+
+@ops.post("/models/{model_id}/activate")
+def activate_model(
+    model_id: str,
+    payload: ModelActivateInput,
+    actor: User = Depends(require_role("admin_ops")),
+    db: Session = Depends(get_db),
+):
+    target = execute_model_activation(db, model_id, actor.id, payload.reason)
     return model_data(target)
+
+
+@model_admin.get("/models")
+def model_admin_list_models(
+    _actor: User = Depends(require_role("admin_model")),
+    db: Session = Depends(get_db),
+):
+    items = db.scalars(select(ModelVersion).order_by(ModelVersion.created_at.desc())).all()
+    return [model_data(item) for item in items]
+
+
+@model_admin.post("/models/{model_id}/activate")
+def model_admin_activate_model(
+    model_id: str,
+    payload: ModelActivateInput | None = None,
+    actor: User = Depends(require_role("admin_model")),
+    db: Session = Depends(get_db),
+):
+    reason = payload.reason if payload else "Kích hoạt bởi Admin Model"
+    target = execute_model_activation(db, model_id, actor.id, reason)
+    return model_data(target)
+
 
 
 @model_admin.get("/feedback")
@@ -571,8 +602,14 @@ def check_checkpoint(path: Path) -> None:
             for opcode, value, _ in pickletools.genops(content)
             if opcode.name in {"BINUNICODE", "SHORT_BINUNICODE", "UNICODE"} and isinstance(value, str)
         }
-        if not {"khoi", "lua"}.issubset(strings):
-            raise HTTPException(status.HTTP_400_BAD_REQUEST, "Checkpoint không khớp hai lớp khoi/lua")
+        strings_lower = {s.lower() for s in strings}
+        has_vn = {"khoi", "lua"}.issubset(strings_lower)
+        has_en = {"smoke", "fire"}.issubset(strings_lower)
+        if not (has_vn or has_en):
+            raise HTTPException(
+                status.HTTP_400_BAD_REQUEST,
+                "Checkpoint không khớp hai lớp khói/lửa (hỗ trợ lớp khoi/lua hoặc smoke/fire)",
+            )
 
 
 @model_admin.post("/models", status_code=201)
@@ -625,3 +662,147 @@ async def submit_model(
         raise
     finally:
         await file.close()
+
+
+@model_admin.get("/mlflow/status")
+def mlflow_status(
+    _actor: User = Depends(require_role("admin_model")),
+):
+    return check_mlflow_connection()
+
+
+@model_admin.get("/mlflow/runs")
+def mlflow_runs(
+    _actor: User = Depends(require_role("admin_model")),
+    db: Session = Depends(get_db),
+):
+    return list_remote_runs(db=db)
+
+
+@model_admin.post("/mlflow/import", status_code=201)
+def mlflow_import(
+    payload: MlflowImportInput,
+    actor: User = Depends(require_role("admin_model")),
+    db: Session = Depends(get_db),
+):
+    return import_run_model(
+        run_id=payload.run_id,
+        model_name=payload.model_name,
+        artifact_path=payload.artifact_path,
+        actor_id=actor.id,
+        db=db,
+        check_checkpoint_fn=check_checkpoint,
+        activate_now=payload.activate_now,
+    )
+
+
+@model_admin.get("/benchmarks/dataset-status")
+def benchmark_dataset_status(
+    _actor: User = Depends(require_role("admin_model")),
+):
+    return get_dataset_status()
+
+
+@model_admin.get("/benchmarks")
+def list_benchmarks(
+    _actor: User = Depends(require_role("admin_model")),
+    db: Session = Depends(get_db),
+):
+    items = db.scalars(
+        select(BenchmarkRun)
+        .options(joinedload(BenchmarkRun.model_version))
+        .order_by(BenchmarkRun.created_at.desc())
+    ).all()
+    return [benchmark_data(item) for item in items]
+
+
+@model_admin.post("/benchmarks/run", status_code=201)
+def trigger_benchmark(
+    payload: BenchmarkRunInput,
+    actor: User = Depends(require_role("admin_model")),
+    db: Session = Depends(get_db),
+):
+    try:
+        run = start_benchmark(payload.model_id, actor_id=actor.id, db=db)
+        return benchmark_data(run)
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc))
+
+
+@model_admin.get("/benchmarks/{benchmark_id}")
+def get_benchmark_detail(
+    benchmark_id: str,
+    _actor: User = Depends(require_role("admin_model")),
+    db: Session = Depends(get_db),
+):
+    item = db.scalar(
+        select(BenchmarkRun)
+        .options(joinedload(BenchmarkRun.model_version))
+        .where(BenchmarkRun.id == benchmark_id)
+        .limit(1)
+    )
+    if not item:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Không tìm thấy lượt benchmark")
+    return benchmark_data(item)
+
+
+@model_admin.get("/benchmarks/compare/{candidate_id}")
+def compare_models_benchmark(
+    candidate_id: str,
+    base_id: str | None = None,
+    _actor: User = Depends(require_role("admin_model")),
+    db: Session = Depends(get_db),
+):
+    candidate = db.get(ModelVersion, candidate_id)
+    if not candidate:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Không tìm thấy mô hình ứng viên")
+
+    base = None
+    if base_id:
+        base = db.get(ModelVersion, base_id)
+    if not base:
+        base = db.scalar(select(ModelVersion).where(ModelVersion.status == "active"))
+    if not base:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Không có mô hình cơ sở đang hoạt động để đối sánh")
+
+    c_run = db.scalar(
+        select(BenchmarkRun)
+        .where(BenchmarkRun.model_version_id == candidate.id, BenchmarkRun.status == "completed")
+        .order_by(BenchmarkRun.completed_at.desc())
+        .limit(1)
+    )
+    b_run = db.scalar(
+        select(BenchmarkRun)
+        .where(BenchmarkRun.model_version_id == base.id, BenchmarkRun.status == "completed")
+        .order_by(BenchmarkRun.completed_at.desc())
+        .limit(1)
+    )
+
+    if not c_run or not c_run.metrics_summary:
+        raise HTTPException(
+            status.HTTP_400_BAD_REQUEST,
+            f"Mô hình '{candidate.name}' chưa có kết quả kiểm định benchmark trên tập test",
+        )
+    if not b_run or not b_run.metrics_summary:
+        raise HTTPException(
+            status.HTTP_400_BAD_REQUEST,
+            f"Mô hình cơ sở '{base.name}' chưa có kết quả kiểm định benchmark trên tập test. Hãy chạy benchmark cho mô hình cơ sở trước.",
+        )
+
+    comparison = compare_benchmarks_metrics(c_run.metrics_summary, b_run.metrics_summary)
+    return {
+        "candidate": {
+            "id": candidate.id,
+            "name": candidate.name,
+            "benchmark_id": c_run.id,
+            "completed_at": iso(c_run.completed_at),
+        },
+        "base": {
+            "id": base.id,
+            "name": base.name,
+            "benchmark_id": b_run.id,
+            "completed_at": iso(b_run.completed_at),
+        },
+        "comparison": comparison,
+    }
+

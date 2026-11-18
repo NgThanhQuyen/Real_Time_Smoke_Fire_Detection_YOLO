@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from .models import AlertEvent, Detection, EventEvidence, Feedback, ModelVersion, RealtimeEvent, RealtimeEvidence, RealtimeSession, User, VideoJob
+from .models import AlertEvent, BenchmarkRun, Detection, EventEvidence, Feedback, ModelVersion, RealtimeEvent, RealtimeEvidence, RealtimeSession, User, VideoJob
 
 
 def iso(value: datetime | None) -> str | None:
@@ -138,4 +138,27 @@ def model_data(item: ModelVersion) -> dict:
         "status": item.status,
         "created_at": iso(item.created_at),
         "activated_at": iso(item.activated_at),
+    }
+
+
+def benchmark_data(item: BenchmarkRun) -> dict:
+    model_name = None
+    try:
+        if item.model_version:
+            model_name = item.model_version.name
+    except Exception:
+        model_name = None
+
+    return {
+        "id": item.id,
+        "model_version_id": item.model_version_id,
+        "model_name": model_name,
+        "dataset_name": item.dataset_name,
+        "status": item.status,
+        "image_count": item.image_count,
+        "metrics_summary": item.metrics_summary,
+        "error_message": item.error_message,
+        "created_by": item.created_by,
+        "created_at": iso(item.created_at),
+        "completed_at": iso(item.completed_at),
     }

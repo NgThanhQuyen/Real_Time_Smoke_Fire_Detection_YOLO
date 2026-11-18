@@ -4,9 +4,26 @@ import asyncio
 import hashlib
 import io
 import logging
+import os
+import sys
 import threading
 import time
 from datetime import timezone
+from pathlib import Path
+
+# Đảm bảo PyTorch nạp trước OpenCV (cv2)
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+_torch_lib = Path(sys.prefix) / "Lib" / "site-packages" / "torch" / "lib"
+if _torch_lib.is_dir() and hasattr(os, "add_dll_directory"):
+    try:
+        os.add_dll_directory(str(_torch_lib))
+    except Exception:
+        pass
+try:
+    import torch
+    from ultralytics import YOLO
+except Exception:
+    pass
 
 import cv2
 import numpy as np
@@ -90,9 +107,11 @@ def load_model(path: str):
             from ultralytics import YOLO
 
             model = YOLO(path)
-            names = {int(key): value for key, value in model.names.items()}
-            if names != {0: "khoi", 1: "lua"}:
-                raise ValueError("Checkpoint không khớp lớp khoi/lua")
+            names = {int(key): str(value).lower() for key, value in model.names.items()}
+            is_vn = names.get(0) == "khoi" and names.get(1) == "lua"
+            is_en = names.get(0) == "smoke" and names.get(1) == "fire"
+            if not (is_vn or is_en):
+                raise ValueError("Checkpoint không khớp hai lớp khói/lửa (hỗ trợ khoi/lua hoặc smoke/fire)")
             _cached_model = model
             _cached_model_path = path
         return _cached_model
@@ -481,14 +500,20 @@ async def realtime(websocket: WebSocket) -> None:
                 await send_json({"type": "busy"})
             except (ValueError, OSError) as exc:
                 await send_json({"type": "frame_error", "message": str(exc)})
-    except WebSocketDisconnect:
+    except (WebSocketDisconnect, ConnectionResetError):
         pass
     except Exception as exc:
+        import traceback
+        error_msg = f"{type(exc).__name__}: {exc}\n{traceback.format_exc()}"
+        logger.exception("Luồng dự đoán webcam gặp lỗi: %s", error_msg)
+        try:
+            (runtime_file("tmp") / "webcam_error.log").write_text(error_msg, encoding="utf-8")
+        except Exception:
+            pass
         session_final_status = "failed"
         session_error_code = type(exc).__name__
-        logger.exception("Luồng dự đoán webcam gặp lỗi")
         try:
-            await websocket.close(code=1011, reason="Không thể tiếp tục dự đoán webcam")
+            await websocket.close(code=1011, reason=f"{type(exc).__name__}: {exc}"[:120])
         except RuntimeError:
             pass
     finally:

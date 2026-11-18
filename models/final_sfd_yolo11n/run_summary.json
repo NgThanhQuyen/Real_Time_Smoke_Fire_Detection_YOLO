@@ -1,0 +1,276 @@
+{
+  "run_id": "final_sfd_yolo11n_20261117_042059",
+  "dataset": "/kaggle/input/datasets/quynnguynthanh/finalsfd-yolo-dataset/FinalSFD_YOLO_Dataset",
+  "dataset_yaml_sha256": "6d052cc2d4bfdf1b32e3e5bfcf7f06c7ed1f379b78a0614a97304bdbbbfddeff",
+  "dataset_images": [
+    {
+      "split": "train",
+      "images": 13293,
+      "fire_only": 2254,
+      "smoke_only": 4454,
+      "both": 3927,
+      "background": 2658,
+      "fire_present": 6181,
+      "smoke_present": 8381,
+      "fire_boxes": 13706,
+      "smoke_boxes": 10024
+    },
+    {
+      "split": "val",
+      "images": 2342,
+      "fire_only": 397,
+      "smoke_only": 785,
+      "both": 692,
+      "background": 468,
+      "fire_present": 1089,
+      "smoke_present": 1477,
+      "fire_boxes": 2392,
+      "smoke_boxes": 1736
+    },
+    {
+      "split": "test",
+      "images": 3857,
+      "fire_only": 647,
+      "smoke_only": 1327,
+      "both": 1111,
+      "background": 772,
+      "fire_present": 1758,
+      "smoke_present": 2438,
+      "fire_boxes": 3897,
+      "smoke_boxes": 2871
+    }
+  ],
+  "box_area_by_class": [
+    {
+      "split": "test",
+      "class": "fire",
+      "boxes": 3897,
+      "median_area": 0.008053318522632604,
+      "mean_area": 0.045853757795613945
+    },
+    {
+      "split": "test",
+      "class": "smoke",
+      "boxes": 2871,
+      "median_area": 0.1416903409090909,
+      "mean_area": 0.22070846903339641
+    },
+    {
+      "split": "train",
+      "class": "fire",
+      "boxes": 13706,
+      "median_area": 0.007918836805555557,
+      "mean_area": 0.043879789611294545
+    },
+    {
+      "split": "train",
+      "class": "smoke",
+      "boxes": 10024,
+      "median_area": 0.14294912855905556,
+      "mean_area": 0.221575347817947
+    },
+    {
+      "split": "val",
+      "class": "fire",
+      "boxes": 2392,
+      "median_area": 0.0076308390523326785,
+      "mean_area": 0.04266905833224696
+    },
+    {
+      "split": "val",
+      "class": "smoke",
+      "boxes": 1736,
+      "median_area": 0.139956986632,
+      "mean_area": 0.22440286836677245
+    }
+  ],
+  "nms_iou_main": 0.5,
+  "nms_iou_sweep": [
+    0.3,
+    0.5,
+    0.7,
+    0.9
+  ],
+  "deploy_conf_selected_on_val": 0.29,
+  "image_level_test": [
+    {
+      "class": "fire",
+      "TP": 1656,
+      "FP": 37,
+      "FN": 102,
+      "TN": 2062,
+      "precision": 0.9781453041937389,
+      "recall": 0.9419795221843004,
+      "F1": 0.9597218197623877
+    },
+    {
+      "class": "smoke",
+      "TP": 2263,
+      "FP": 187,
+      "FN": 175,
+      "TN": 1232,
+      "precision": 0.9236734693877551,
+      "recall": 0.928219852337982,
+      "F1": 0.9259410801963992
+    },
+    {
+      "class": "any",
+      "TP": 2965,
+      "FP": 54,
+      "FN": 120,
+      "TN": 718,
+      "precision": 0.9821132825438887,
+      "recall": 0.9611021069692058,
+      "F1": 0.9714941022280472
+    }
+  ],
+  "box_recall_by_size_test": [
+    {
+      "class": "smoke",
+      "size_group": "<1%",
+      "ground_truth_boxes": 498,
+      "matched_boxes": 336,
+      "recall_at_conf_iou05": 0.6746987951807228
+    },
+    {
+      "class": "smoke",
+      "size_group": "1–10%",
+      "ground_truth_boxes": 717,
+      "matched_boxes": 535,
+      "recall_at_conf_iou05": 0.7461645746164575
+    },
+    {
+      "class": "smoke",
+      "size_group": "≥10%",
+      "ground_truth_boxes": 1656,
+      "matched_boxes": 1482,
+      "recall_at_conf_iou05": 0.894927536231884
+    },
+    {
+      "class": "fire",
+      "size_group": "<1%",
+      "ground_truth_boxes": 2127,
+      "matched_boxes": 1225,
+      "recall_at_conf_iou05": 0.5759285378467325
+    },
+    {
+      "class": "fire",
+      "size_group": "1–10%",
+      "ground_truth_boxes": 1256,
+      "matched_boxes": 936,
+      "recall_at_conf_iou05": 0.7452229299363057
+    },
+    {
+      "class": "fire",
+      "size_group": "≥10%",
+      "ground_truth_boxes": 514,
+      "matched_boxes": 417,
+      "recall_at_conf_iou05": 0.811284046692607
+    }
+  ],
+  "local_label_fixes": {
+    "clip_to_image": 379,
+    "drop_zero_area": 18,
+    "affected_labels": 340
+  },
+  "class_map": {
+    "0": "smoke",
+    "1": "fire"
+  },
+  "model_source": "yolo11n.pt (COCO pretrained)",
+  "checkpoint_in_zip": "best.pt",
+  "best_checkpoint_sha256": "2c632cdc27c1840c5a5b266f860994f8a4c6c95e3eb7204998384b8354a293eb",
+  "training": {
+    "epochs_max": 250,
+    "patience": 30,
+    "imgsz": 640,
+    "batch": 32,
+    "seed": 0,
+    "workers": 4,
+    "dataset_copy_seconds": 2389.41,
+    "dataset_copy_method": "copy_directory",
+    "duration_seconds": 23079.15
+  },
+  "evaluation": {
+    "val": {
+      "split": "val",
+      "overall": {
+        "precision": 0.7872332636959356,
+        "recall": 0.7420915339919547,
+        "mAP50": 0.7866015471895709,
+        "mAP50_95": 0.4539469020677342
+      },
+      "per_class": [
+        {
+          "class_id": 0,
+          "class_name": "smoke",
+          "precision": 0.833603574974228,
+          "recall": 0.8081797235023042,
+          "mAP50": 0.842918647428573,
+          "mAP50_95": 0.522871958905827
+        },
+        {
+          "class_id": 1,
+          "class_name": "fire",
+          "precision": 0.7408629524176431,
+          "recall": 0.6760033444816054,
+          "mAP50": 0.7302844469505687,
+          "mAP50_95": 0.3850218452296415
+        }
+      ],
+      "validation_conf": 0.001,
+      "nms_iou": 0.5
+    },
+    "test": {
+      "split": "test",
+      "overall": {
+        "precision": 0.7909592319600343,
+        "recall": 0.744283433417365,
+        "mAP50": 0.7973446970073933,
+        "mAP50_95": 0.45945521393601113
+      },
+      "per_class": [
+        {
+          "class_id": 0,
+          "class_name": "smoke",
+          "precision": 0.834874440758772,
+          "recall": 0.8171309366681136,
+          "mAP50": 0.8587644353539317,
+          "mAP50_95": 0.535043873862439
+        },
+        {
+          "class_id": 1,
+          "class_name": "fire",
+          "precision": 0.7470440231612965,
+          "recall": 0.6714359301666164,
+          "mAP50": 0.7359249586608549,
+          "mAP50_95": 0.3838665540095831
+        }
+      ],
+      "validation_conf": 0.001,
+      "nms_iou": 0.5
+    }
+  },
+  "background_test": {
+    "split": "test",
+    "confidence": 0.29,
+    "nms_iou": 0.5,
+    "device": "cpu",
+    "batch": 1,
+    "background_images": 772,
+    "images_with_detection": 54,
+    "image_false_positive_rate": 0.06994818652849741
+  },
+  "software": {
+    "python": "3.13.16",
+    "ultralytics": "8.4.203",
+    "torch": "2.11.0+cu130",
+    "gpu": "Tesla T4"
+  },
+  "limits": [
+    "Confidence chọn bằng max F1 trên val; cần thử thêm trên video thực tế trước triển khai.",
+    "Tập test chưa được chứng minh độc lập hoàn toàn theo cảnh/video.",
+    "Bảng recall theo kích thước dùng diện tích box chuẩn hóa và confidence triển khai, không phải COCO AP_small/medium/large.",
+    "Metrics ảnh có nhãn không phải metrics cảnh báo theo sự kiện video."
+  ]
+}

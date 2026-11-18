@@ -56,6 +56,12 @@ best.pt
 *.mov
 *.mkv
 
+# Benchmark test datasets
+data/test_benchmark/images/*
+!data/test_benchmark/images/.gitkeep
+data/test_benchmark/labels/*
+!data/test_benchmark/labels/.gitkeep
+
 # OS generated files
 .DS_Store
 Thumbs.db

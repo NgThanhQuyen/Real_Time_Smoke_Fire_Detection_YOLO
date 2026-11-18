@@ -1,0 +1,8 @@
+# Cấu hình tự động sinh cho bộ kiểm định Golden Test
+path: "F:/6/KLTN/Real_Time_Smoke_Fire_Detection_YOLO/data/test_benchmark"
+train: "images"
+val: "images"
+test: "images"
+names:
+  0: khoi
+  1: lua

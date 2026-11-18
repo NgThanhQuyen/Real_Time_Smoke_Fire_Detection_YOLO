@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { api, className, formatDate, formatVideoTime, json } from "./api";
 import AnnotationEditor from "./AnnotationEditor";
 import type { AnnotationBox } from "./AnnotationEditor";
-import type { AdminEvent, AdminJob, DetectedFrame, Detection, Feedback, ModelVersion, Profile, RealtimeSession, User, VideoJob } from "./types";
+import type { AdminEvent, AdminJob, BenchmarkComparison, BenchmarkRun, DatasetStatus, DetectedFrame, Detection, Feedback, MlflowRun, MlflowStatus, ModelVersion, Profile, RealtimeSession, User, VideoJob } from "./types";
 
 type Area = "videos" | "realtime" | "profile" | "events" | "jobs" | "accounts" | "versions" | "reviews" | "candidates";
 
@@ -975,27 +975,169 @@ function AccountsView() {
 
 function VersionsView() {
   const [models, setModels] = useState<ModelVersion[]>([]);
-  const [reason, setReason] = useState("");
   const notice = useMessage();
+
   async function refresh() {
-    try { setModels(await api<ModelVersion[]>("/api/admin/models")); }
-    catch (error) { notice.fail(error); }
-  }
-  useEffect(() => { void refresh(); }, []);
-  async function activate(model: ModelVersion) {
     try {
-      await api(`/api/admin/models/${model.id}/activate`, json("POST", { reason }));
-      notice.success("Đã kích hoạt phiên bản mô hình. Tác vụ mới sẽ dùng phiên bản này.");
-      setReason("");
-      await refresh();
-    } catch (error) { notice.fail(error); }
+      setModels(await api<ModelVersion[]>("/api/admin/models"));
+    } catch (error) {
+      notice.fail(error);
+    }
   }
-  return <div className="page"><div className="page-header"><div><p className="eyebrow">Quản trị vận hành</p><h1>Phiên bản mô hình</h1><p className="muted">Chỉ kích hoạt sau khi xem báo cáo đánh giá; có thể trở lại phiên bản trước.</p></div></div>
-    <Notice message={notice.message} error={notice.error} />
-    <label className="reason-field">Lý do kích hoạt hoặc rollback<input value={reason} onChange={(event) => setReason(event.target.value)} placeholder="Ví dụ: giảm báo động giả trên bộ video âm tính" minLength={5} /></label>
-    <div className="version-list">{models.map((model) => <article key={model.id} className="version-row"><div><div className="split-title"><h2>{model.name}</h2><span className={`status ${model.status}`}>{modelLabels[model.status] || model.status}</span></div><p className="muted">Tạo {formatDate(model.created_at)} · SHA256 {model.sha256.slice(0, 14)}...</p><details><summary>Xem báo cáo đánh giá</summary><pre>{JSON.stringify(model.metrics, null, 2)}</pre></details></div>{model.status !== "active" && <button className="button secondary" disabled={reason.trim().length < 5} onClick={() => activate(model)}>{model.status === "retired" ? "Rollback về bản này" : "Kích hoạt"}</button>}</article>)}</div>
-  </div>;
+
+  useEffect(() => {
+    void refresh();
+  }, []);
+
+  const activeModel = models.find((m) => m.status === "active") || models[0];
+
+  return (
+    <div className="page">
+      <div className="page-header">
+        <div>
+          <p className="eyebrow">Quản trị vận hành</p>
+          <h1>Phiên bản mô hình AI</h1>
+          <p className="muted">Theo dõi phiên bản mô hình AI đang vận hành trên hệ thống web.</p>
+        </div>
+      </div>
+
+      <Notice message={notice.message} error={notice.error} />
+
+      <div className="notice" style={{ marginBottom: "1.5rem" }}>
+        <span>ℹ️</span>
+        <div>
+          Toàn bộ việc huấn luyện, tải mô hình từ DagsHub MLflow, kiểm định, kích hoạt và rollback được quản lý tập trung bởi <strong>Quản trị viên Mô hình (Admin Model)</strong>.
+        </div>
+      </div>
+
+      {activeModel ? (
+        <div
+          className="active-model-card"
+          style={{
+            background: "var(--bg-surface)",
+            border: "1px solid var(--border-default)",
+            borderRadius: "var(--radius-lg)",
+            padding: "2rem",
+            marginBottom: "2rem",
+            boxShadow: "var(--shadow-sm)",
+          }}
+        >
+          <div className="split-title" style={{ marginBottom: "1rem" }}>
+            <div>
+              <span className="eyebrow" style={{ color: "var(--color-fire)", fontWeight: 700 }}>
+                MÔ HÌNH ĐANG HOẠT ĐỘNG
+              </span>
+              <h2 style={{ fontSize: "1.5rem", margin: "0.4rem 0" }}>{activeModel.name}</h2>
+            </div>
+            <span className="status completed" style={{ fontSize: "0.85rem", padding: "0.4rem 1rem" }}>
+              ● ĐANG SỬ DỤNG
+            </span>
+          </div>
+
+          <p className="muted" style={{ marginBottom: "1.2rem" }}>
+            Kích hoạt lúc: <strong>{activeModel.activated_at ? formatDate(activeModel.activated_at) : formatDate(activeModel.created_at)}</strong> · 
+            SHA-256: <code style={{ fontFamily: "var(--font-mono)", color: "#38bdf8" }}>{activeModel.sha256.slice(0, 16)}...</code>
+          </p>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gap: "1rem",
+              marginBottom: "1.5rem",
+            }}
+          >
+            <div
+              style={{
+                background: "var(--bg-surface-elevated)",
+                padding: "1rem",
+                borderRadius: "var(--radius-md)",
+                border: "1px solid var(--border-subtle)",
+              }}
+            >
+              <span className="small muted">Kiến trúc</span>
+              <p style={{ fontWeight: 600, fontSize: "1.05rem", margin: "0.2rem 0 0" }}>YOLO11n</p>
+            </div>
+            <div
+              style={{
+                background: "var(--bg-surface-elevated)",
+                padding: "1rem",
+                borderRadius: "var(--radius-md)",
+                border: "1px solid var(--border-subtle)",
+              }}
+            >
+              <span className="small muted">Kích thước ảnh (imgsz)</span>
+              <p style={{ fontWeight: 600, fontSize: "1.05rem", margin: "0.2rem 0 0" }}>
+                {(activeModel.config as Record<string, unknown>)?.imgsz
+                  ? String((activeModel.config as Record<string, unknown>).imgsz)
+                  : "832"}
+              </p>
+            </div>
+            <div
+              style={{
+                background: "var(--bg-surface-elevated)",
+                padding: "1rem",
+                borderRadius: "var(--radius-md)",
+                border: "1px solid var(--border-subtle)",
+              }}
+            >
+              <span className="small muted">Số lớp nhận diện</span>
+              <p style={{ fontWeight: 600, fontSize: "1.05rem", margin: "0.2rem 0 0" }}>2 (0: Khói, 1: Lửa)</p>
+            </div>
+          </div>
+
+          <details>
+            <summary style={{ cursor: "pointer", color: "var(--color-fire)", fontWeight: 600 }}>
+              Xem báo cáo metrics chi tiết
+            </summary>
+            <pre
+              style={{
+                background: "var(--bg-surface-subtle)",
+                padding: "1rem",
+                borderRadius: "var(--radius-sm)",
+                marginTop: "0.8rem",
+                fontSize: "0.82rem",
+                overflowX: "auto",
+              }}
+            >
+              {JSON.stringify(activeModel.metrics, null, 2)}
+            </pre>
+          </details>
+        </div>
+      ) : (
+        <div className="empty-panel">
+          <p>Chưa có phiên bản mô hình nào được kích hoạt.</p>
+        </div>
+      )}
+
+      <h2>Lịch sử các phiên bản mô hình</h2>
+      <div className="version-list" style={{ marginTop: "1rem" }}>
+        {models.map((model) => (
+          <article key={model.id} className="version-row">
+            <div>
+              <div className="split-title">
+                <h3>{model.name}</h3>
+                <span className={`status ${model.status}`}>
+                  {modelLabels[model.status] || model.status}
+                </span>
+              </div>
+              <p className="muted small">
+                Tạo: {formatDate(model.created_at)}
+                {model.activated_at && ` · Kích hoạt: ${formatDate(model.activated_at)}`} · 
+                SHA256: {model.sha256.slice(0, 14)}...
+              </p>
+              <details>
+                <summary>Xem metrics</summary>
+                <pre>{JSON.stringify(model.metrics, null, 2)}</pre>
+              </details>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
 }
+
 
 function ReviewsView() {
   const [items, setItems] = useState<Feedback[]>([]);
@@ -1095,34 +1237,863 @@ function ReviewsView() {
 }
 
 function CandidatesView() {
+  const [tab, setTab] = useState<"mlflow" | "versions" | "benchmark" | "manual">("mlflow");
+  const [mlflowStatus, setMlflowStatus] = useState<MlflowStatus | null>(null);
+  const [runs, setRuns] = useState<MlflowRun[]>([]);
+  const [loadingRuns, setLoadingRuns] = useState(false);
+  const [selectedRun, setSelectedRun] = useState<MlflowRun | null>(null);
+  const [importModelName, setImportModelName] = useState("");
+  const [importing, setImporting] = useState(false);
+
+  // Danh sách phiên bản trong DB & Kích hoạt / Rollback
+  const [dbModels, setDbModels] = useState<ModelVersion[]>([]);
+  const [loadingDbModels, setLoadingDbModels] = useState(false);
+  const [activatingId, setActivatingId] = useState<string | null>(null);
+
+  // Kiểm định Golden Test
+  const [datasetStatus, setDatasetStatus] = useState<DatasetStatus | null>(null);
+  const [loadingDataset, setLoadingDataset] = useState(false);
+  const [benchmarks, setBenchmarks] = useState<BenchmarkRun[]>([]);
+  const [loadingBenchmarks, setLoadingBenchmarks] = useState(false);
+  const [selectedBenchmarkModel, setSelectedBenchmarkModel] = useState<string>("");
+  const [runningBenchmarkId, setRunningBenchmarkId] = useState<string | null>(null);
+  const [comparison, setComparison] = useState<BenchmarkComparison | null>(null);
+  const [comparingCandidateId, setComparingCandidateId] = useState<string | null>(null);
+
+  // Form nộp thủ công
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState("");
   const [metrics, setMetrics] = useState("");
   const [busy, setBusy] = useState(false);
   const notice = useMessage();
-  async function submit(event: React.FormEvent) {
+
+  async function loadMlflow() {
+    setLoadingRuns(true);
+    try {
+      const [statusRes, runsRes] = await Promise.all([
+        api<MlflowStatus>("/api/model-admin/mlflow/status"),
+        api<MlflowRun[]>("/api/model-admin/mlflow/runs"),
+      ]);
+      setMlflowStatus(statusRes);
+      setRuns(runsRes);
+    } catch (err) {
+      notice.fail(err);
+    } finally {
+      setLoadingRuns(false);
+    }
+  }
+
+  async function loadDbModels() {
+    setLoadingDbModels(true);
+    try {
+      const res = await api<ModelVersion[]>("/api/model-admin/models");
+      setDbModels(res);
+      if (res.length > 0 && !selectedBenchmarkModel) {
+        setSelectedBenchmarkModel(res[0].id);
+      }
+    } catch (err) {
+      notice.fail(err);
+    } finally {
+      setLoadingDbModels(false);
+    }
+  }
+
+  async function loadDataset() {
+    setLoadingDataset(true);
+    try {
+      const res = await api<DatasetStatus>("/api/model-admin/benchmarks/dataset-status");
+      setDatasetStatus(res);
+    } catch (err) {
+      notice.fail(err);
+    } finally {
+      setLoadingDataset(false);
+    }
+  }
+
+  async function loadBenchmarks() {
+    setLoadingBenchmarks(true);
+    try {
+      const res = await api<BenchmarkRun[]>("/api/model-admin/benchmarks");
+      setBenchmarks(res);
+    } catch (err) {
+      notice.fail(err);
+    } finally {
+      setLoadingBenchmarks(false);
+    }
+  }
+
+  async function triggerBenchmark() {
+    if (!selectedBenchmarkModel) return;
+    setRunningBenchmarkId(selectedBenchmarkModel);
+    try {
+      await api("/api/model-admin/benchmarks/run", json("POST", { model_id: selectedBenchmarkModel }));
+      notice.success("Đã bắt đầu kiểm định mô hình trên tập Golden Test! Hệ thống đang xử lý trong nền.");
+      await loadBenchmarks();
+    } catch (err) {
+      notice.fail(err);
+    } finally {
+      setRunningBenchmarkId(null);
+    }
+  }
+
+  async function compareWithActive(candidateId: string) {
+    setComparingCandidateId(candidateId);
+    try {
+      const res = await api<BenchmarkComparison>(`/api/model-admin/benchmarks/compare/${candidateId}`);
+      setComparison(res);
+      notice.clear();
+    } catch (err) {
+      notice.fail(err);
+    } finally {
+      setComparingCandidateId(null);
+    }
+  }
+
+  useEffect(() => {
+    if (tab === "mlflow") {
+      void loadMlflow();
+    } else if (tab === "versions") {
+      void loadDbModels();
+    } else if (tab === "benchmark") {
+      void loadDataset();
+      void loadBenchmarks();
+      void loadDbModels();
+    }
+  }, [tab]);
+
+  useEffect(() => {
+    if (tab !== "benchmark") return;
+    const hasRunning = benchmarks.some((b) => b.status === "running" || b.status === "queued");
+    if (!hasRunning) return;
+    const interval = setInterval(() => {
+      void loadBenchmarks();
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [tab, benchmarks]);
+
+  function startImport(run: MlflowRun) {
+    setSelectedRun(run);
+    setImportModelName(run.run_name || `model-${run.run_id.slice(0, 8)}`);
+  }
+
+  async function confirmImport(activateNow: boolean) {
+    if (!selectedRun) return;
+    const finalName = importModelName.trim() || selectedRun.run_name;
+    setImporting(true);
+    try {
+      await api("/api/model-admin/mlflow/import", json("POST", {
+        run_id: selectedRun.run_id,
+        model_name: finalName,
+        artifact_path: selectedRun.checkpoint_path || "model/best.pt",
+        activate_now: activateNow,
+      }));
+      if (activateNow) {
+        notice.success(`Đã tải về và kích hoạt mô hình '${finalName}' thành công! Toàn bộ hệ thống web và webcam hiện đang sử dụng mô hình mới nhất này.`);
+      } else {
+        notice.success(`Đã tải về mô hình ứng viên '${finalName}'. Bạn có thể kiểm tra và kích hoạt tại tab 'Phiên bản & Rollback'.`);
+      }
+      setSelectedRun(null);
+      setImportModelName("");
+      await loadMlflow();
+      await loadDbModels();
+    } catch (err) {
+      notice.fail(err);
+    } finally {
+      setImporting(false);
+    }
+  }
+
+  async function activateModel(model: ModelVersion) {
+    setActivatingId(model.id);
+    try {
+      await api(`/api/model-admin/models/${model.id}/activate`, json("POST", { reason: "Kích hoạt bởi Admin Model" }));
+      notice.success(`Đã kích hoạt mô hình '${model.name}'. Toàn bộ hệ thống web và webcam hiện đang sử dụng mô hình này.`);
+      await loadDbModels();
+    } catch (err) {
+      notice.fail(err);
+    } finally {
+      setActivatingId(null);
+    }
+  }
+
+  async function submitManual(event: React.FormEvent) {
     event.preventDefault();
     if (!file) return;
     const form = new FormData();
-    form.append("file", file); form.append("name", name); form.append("metrics_json", metrics);
+    form.append("file", file);
+    form.append("name", name);
+    form.append("metrics_json", metrics);
     setBusy(true);
     try {
       await api("/api/model-admin/models", { method: "POST", body: form });
-      notice.success("Đã đăng ký mô hình ứng viên. Admin vận hành sẽ xem báo cáo trước khi kích hoạt.");
-      setFile(null); setName(""); setMetrics("");
-    } catch (reason) { notice.fail(reason); }
-    finally { setBusy(false); }
+      notice.success("Đã đăng ký mô hình ứng viên thủ công. Bạn có thể kích hoạt tại tab 'Phiên bản & Rollback'.");
+      setFile(null);
+      setName("");
+      setMetrics("");
+      await loadDbModels();
+    } catch (reason) {
+      notice.fail(reason);
+    } finally {
+      setBusy(false);
+    }
   }
-  return <div className="page"><div className="page-header"><div><p className="eyebrow">Quản trị mô hình</p><h1>Đăng ký mô hình ứng viên</h1><p className="muted">Nộp checkpoint và kết quả đánh giá trên cùng bộ test. Web không tự huấn luyện mô hình.</p></div></div><Notice message={notice.message} error={notice.error} />
-    <form className="candidate-form stack-form" onSubmit={submit}>
-      <label>Tên phiên bản<input value={name} onChange={(event) => setName(event.target.value)} required placeholder="Ví dụ: yolo11n-v7-candidate" /></label>
-      <label>Checkpoint .pt<input type="file" accept=".pt" onChange={(event) => setFile(event.target.files?.[0] || null)} required /></label>
-      <label>Báo cáo metrics dạng JSON<textarea value={metrics} onChange={(event) => setMetrics(event.target.value)} rows={9} required placeholder='{"test_mAP50": 0.75, "negative_video_false_events": 0}' /></label>
-      <p className="small muted">Bao gồm kết quả trên video âm tính và độ trễ cảnh báo. Chỉ admin vận hành được kích hoạt phiên bản.</p>
-      <button className="button primary" disabled={busy}>{busy ? "Đang tải..." : "Đăng ký ứng viên"}</button>
-    </form>
-  </div>;
+
+  return (
+    <div className="page">
+      <div className="page-header">
+        <div>
+          <p className="eyebrow">Quản trị mô hình</p>
+          <h1>Quản lý phiên bản mô hình AI</h1>
+          <p className="muted">Tự động đồng bộ checkpoint từ DagsHub MLflow, kiểm định, kích hoạt phiên bản chính hoặc rollback.</p>
+        </div>
+      </div>
+
+      <Notice message={notice.message} error={notice.error} />
+
+      <div className="tabs" role="tablist">
+        <button
+          className={tab === "mlflow" ? "active" : ""}
+          onClick={() => setTab("mlflow")}
+          type="button"
+        >
+          Đồng bộ DagsHub MLflow
+        </button>
+        <button
+          className={tab === "benchmark" ? "active" : ""}
+          onClick={() => setTab("benchmark")}
+          type="button"
+        >
+          Kiểm định Golden Test
+        </button>
+        <button
+          className={tab === "versions" ? "active" : ""}
+          onClick={() => setTab("versions")}
+          type="button"
+        >
+          Phiên bản &amp; Rollback
+        </button>
+        <button
+          className={tab === "manual" ? "active" : ""}
+          onClick={() => setTab("manual")}
+          type="button"
+        >
+          Nộp file thủ công (.pt)
+        </button>
+      </div>
+
+      {tab === "mlflow" && (
+        <div className="mlflow-panel">
+          <div className="mlflow-status-card">
+            <div className="mlflow-status-left">
+              <span
+                className={`mlflow-status-indicator ${mlflowStatus?.connected ? "" : "disconnected"}`}
+                title={mlflowStatus?.connected ? "Đã kết nối DagsHub" : "Chưa kết nối"}
+              />
+              <div>
+                <strong>DagsHub MLflow Server</strong>
+                <p className="mlflow-uri-text">
+                  {mlflowStatus?.tracking_uri || "Chưa cấu hình MLFLOW_TRACKING_URI"}
+                </p>
+              </div>
+            </div>
+            <button
+              className="button secondary"
+              type="button"
+              disabled={loadingRuns}
+              onClick={loadMlflow}
+            >
+              {loadingRuns ? "Đang đồng bộ..." : "Làm mới danh sách"}
+            </button>
+          </div>
+
+          {selectedRun && (
+            <div className="import-confirm-card" style={{ maxWidth: "600px" }}>
+              <h3>Tải mô hình từ DagsHub MLflow</h3>
+              <p className="small muted">
+                Run ID: <code>{selectedRun.run_id.slice(0, 10)}...</code> · Checkpoint: <code>{selectedRun.checkpoint_path || "model/best.pt"}</code>
+              </p>
+              <label>
+                Tên hiển thị trong FLARE:
+                <input
+                  value={importModelName}
+                  onChange={(e) => setImportModelName(e.target.value)}
+                  placeholder="Ví dụ: yolo11n-v7-retrained"
+                  disabled={importing}
+                />
+              </label>
+              <div className="cluster-actions" style={{ gap: "0.8rem", marginTop: "0.8rem" }}>
+                <button
+                  className="button primary"
+                  type="button"
+                  disabled={importing || !importModelName.trim()}
+                  onClick={() => confirmImport(true)}
+                  style={{ background: "var(--color-fire)", borderColor: "var(--color-fire)" }}
+                >
+                  {importing ? "Đang tải & kích hoạt..." : "Tải về & Kích hoạt dùng ngay"}
+                </button>
+                <button
+                  className="button secondary"
+                  type="button"
+                  disabled={importing || !importModelName.trim()}
+                  onClick={() => confirmImport(false)}
+                >
+                  {importing ? "Đang tải..." : "Chỉ lưu làm Candidate"}
+                </button>
+                <button
+                  className="button secondary"
+                  type="button"
+                  disabled={importing}
+                  onClick={() => setSelectedRun(null)}
+                >
+                  Hủy
+                </button>
+              </div>
+            </div>
+          )}
+
+          {loadingRuns && runs.length === 0 ? (
+            <p className="muted">Đang kết nối và tải danh sách lượt huấn luyện từ DagsHub...</p>
+          ) : runs.length === 0 ? (
+            <div className="empty-panel">
+              <p>Chưa có lượt huấn luyện nào được ghi nhận trên DagsHub MLflow.</p>
+              <p className="small muted">
+                Sau khi huấn luyện mô hình trên Kaggle, hãy thêm đoạn mã sau vào cuối notebook để tự động đẩy mô hình lên DagsHub:
+              </p>
+              <details className="mt-2">
+                <summary style={{ cursor: "pointer", color: "var(--color-fire)", fontWeight: 600 }}>
+                  Xem mẫu code tích hợp Kaggle Notebook
+                </summary>
+                <div className="code-snippet-box">
+{`# 1. Cài đặt MLflow trên Kaggle
+!pip install -q mlflow
+
+# 2. Cấu hình DagsHub MLflow
+import os
+import mlflow
+
+os.environ['MLFLOW_TRACKING_USERNAME'] = 'nguyenthanhquyen145'
+os.environ['MLFLOW_TRACKING_PASSWORD'] = '51f73bbb80d0249ca00102410fdf56b12dd8fc24'
+mlflow.set_tracking_uri('https://dagshub.com/nguyenthanhquyen145/Real_Time_Smoke_Fire_Detection_YOLO.mlflow')
+
+# 3. Ghi kết quả sau khi train xong
+with mlflow.start_run(run_name="yolo11n-kaggle-run-1"):
+    mlflow.log_params({"imgsz": 832, "epochs": 100, "model": "yolo11n"})
+    mlflow.log_metrics({
+        "mAP50": 0.7492,
+        "mAP50-95": 0.4226,
+        "precision": 0.7683,
+        "recall": 0.6796
+    })
+    mlflow.log_artifact("runs/detect/train/weights/best.pt", artifact_path="model")
+    print("Đã tải mô hình lên DagsHub MLflow thành công!")`}
+                </div>
+              </details>
+            </div>
+          ) : (
+            <div className="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Lượt huấn luyện</th>
+                    <th>Thời gian</th>
+                    <th>Trạng thái</th>
+                    <th>Metrics kiểm thử</th>
+                    <th>Checkpoint</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {runs.map((run) => (
+                    <tr key={run.run_id}>
+                      <td>
+                        <strong>{run.run_name}</strong>
+                        <p className="small muted font-mono">{run.run_id.slice(0, 8)}</p>
+                      </td>
+                      <td>{run.start_time ? formatDate(run.start_time) : "—"}</td>
+                      <td>
+                        <span className={`status ${run.status.toLowerCase()}`}>
+                          {run.status}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="metric-tag-group">
+                          {run.metrics.mAP50 !== undefined && (
+                            <span className="metric-tag">
+                              mAP50: <strong>{(run.metrics.mAP50 * 100).toFixed(1)}%</strong>
+                            </span>
+                          )}
+                          {run.metrics["mAP50-95"] !== undefined && (
+                            <span className="metric-tag">
+                              mAP50-95: <strong>{(run.metrics["mAP50-95"] * 100).toFixed(1)}%</strong>
+                            </span>
+                          )}
+                          {run.metrics.precision !== undefined && (
+                            <span className="metric-tag">
+                              P: <strong>{(run.metrics.precision * 100).toFixed(1)}%</strong>
+                            </span>
+                          )}
+                          {run.metrics.recall !== undefined && (
+                            <span className="metric-tag">
+                              R: <strong>{(run.metrics.recall * 100).toFixed(1)}%</strong>
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td>
+                        {run.has_checkpoint ? (
+                          <span className="status completed" title={run.checkpoint_path}>
+                            {run.checkpoint_path.split("/").pop()}
+                          </span>
+                        ) : (
+                          <span className="muted small">Không có .pt</span>
+                        )}
+                      </td>
+                      <td>
+                        {run.is_imported ? (
+                          <span className="status active">Đã đăng ký</span>
+                        ) : run.has_checkpoint ? (
+                          <button
+                            className="button primary"
+                            type="button"
+                            disabled={importing && selectedRun?.run_id === run.run_id}
+                            onClick={() => startImport(run)}
+                            style={{ fontSize: "0.82rem", padding: "0.45rem 0.9rem" }}
+                          >
+                            Tải về &amp; Kích hoạt
+                          </button>
+                        ) : (
+                          <span className="muted small">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
+
+      {tab === "versions" && (
+        <div className="versions-panel">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.2rem" }}>
+            <div>
+              <h2>Danh sách phiên bản trong hệ thống</h2>
+              <p className="muted small">Quản lý kích hoạt mô hình chính hoặc rollback về các phiên bản trước.</p>
+            </div>
+            <button className="button secondary" onClick={loadDbModels} disabled={loadingDbModels}>
+              {loadingDbModels ? "Đang tải..." : "Làm mới"}
+            </button>
+          </div>
+
+          <div className="version-list">
+            {dbModels.map((model) => (
+              <article key={model.id} className="version-row">
+                <div style={{ flex: 1 }}>
+                  <div className="split-title">
+                    <h3>{model.name}</h3>
+                    <span className={`status ${model.status}`}>
+                      {model.status === "active" ? "ĐANG SỬ DỤNG" : model.status === "candidate" ? "ỨNG VIÊN" : "LƯU TRỮ"}
+                    </span>
+                  </div>
+                  <p className="muted small">
+                    Tạo: {formatDate(model.created_at)}
+                    {model.activated_at && ` · Kích hoạt: ${formatDate(model.activated_at)}`} · 
+                    SHA256: {model.sha256.slice(0, 14)}...
+                  </p>
+                  <details style={{ marginTop: "0.6rem" }}>
+                    <summary style={{ cursor: "pointer", color: "var(--color-fire)", fontSize: "0.85rem", fontWeight: 600 }}>
+                      Xem báo cáo metrics
+                    </summary>
+                    <pre style={{ background: "var(--bg-surface-subtle)", padding: "0.8rem", borderRadius: "var(--radius-sm)", marginTop: "0.5rem", fontSize: "0.8rem" }}>
+                      {JSON.stringify(model.metrics, null, 2)}
+                    </pre>
+                  </details>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", marginLeft: "1rem" }}>
+                  {model.status === "active" ? (
+                    <span className="status completed" style={{ padding: "0.45rem 1rem" }}>
+                      ● Đang chạy
+                    </span>
+                  ) : (
+                    <button
+                      className="button secondary"
+                      disabled={activatingId === model.id}
+                      onClick={() => activateModel(model)}
+                    >
+                      {activatingId === model.id
+                        ? "Đang kích hoạt..."
+                        : model.status === "retired"
+                        ? "Rollback về bản này"
+                        : "Kích hoạt làm bản chính"}
+                    </button>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {tab === "benchmark" && (
+        <div className="benchmark-panel">
+          {/* 1. Trạng thái tập dữ liệu kiểm thử */}
+          <div className={`benchmark-card dataset-banner ${datasetStatus?.is_ready ? "ready" : ""}`}>
+            <div style={{ flex: 1 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.4rem" }}>
+                <span
+                  style={{
+                    display: "inline-block",
+                    width: 10,
+                    height: 10,
+                    borderRadius: "50%",
+                    background: datasetStatus?.is_ready ? "var(--color-success)" : "var(--color-warning)",
+                  }}
+                />
+                <h3 style={{ margin: 0, fontSize: "1.15rem" }}>
+                  {datasetStatus?.is_ready
+                    ? "Tập dữ liệu Golden Test đã sẵn sàng"
+                    : "Chưa nạp đủ ảnh/nhãn vào tập Golden Test"}
+                </h3>
+              </div>
+
+              <p className="muted small" style={{ margin: 0 }}>
+                {datasetStatus?.is_ready ? (
+                  <>
+                    Phát hiện <strong>{datasetStatus.images_count}</strong> ảnh (khuyến nghị ~{datasetStatus.recommended_count}) và{" "}
+                    <strong>{datasetStatus.labels_count}</strong> file nhãn YOLO. Đã sẵn sàng để chạy đánh giá benchmark tự động.
+                  </>
+                ) : (
+                  <>
+                    Hệ thống đã chuẩn bị sẵn thư mục. Hãy copy toàn bộ ảnh test vào{" "}
+                    <code style={{ color: "#38bdf8" }}>data/test_benchmark/images</code> và file nhãn vào{" "}
+                    <code style={{ color: "#38bdf8" }}>data/test_benchmark/labels</code>.
+                  </>
+                )}
+              </p>
+
+              <div className="dataset-info-chips">
+                <span className="dataset-chip">
+                  Ảnh: <strong>{datasetStatus?.images_count ?? 0}</strong>
+                </span>
+                <span className="dataset-chip">
+                  Nhãn: <strong>{datasetStatus?.labels_count ?? 0}</strong>
+                </span>
+                <span className="dataset-chip">
+                  Dung lượng: <strong>{datasetStatus?.total_mb ?? 0} MB</strong>
+                </span>
+                <span className="dataset-chip" title={datasetStatus?.folder_path}>
+                  Thư mục: <span style={{ opacity: 0.8 }}>data/test_benchmark</span>
+                </span>
+              </div>
+            </div>
+
+            <button
+              className="button secondary"
+              type="button"
+              disabled={loadingDataset}
+              onClick={loadDataset}
+              style={{ whiteSpace: "nowrap" }}
+            >
+              {loadingDataset ? "Đang quét..." : "Làm mới dữ liệu"}
+            </button>
+          </div>
+
+          {/* 2. Điều khiển kích hoạt Benchmark */}
+          <div className="benchmark-card">
+            <h3 style={{ marginTop: 0, marginBottom: "0.5rem" }}>Khởi chạy đánh giá mô hình</h3>
+            <p className="muted small" style={{ marginBottom: "1.2rem" }}>
+              Đánh giá tự động Precision, Recall, mAP50, mAP50-95 và thời gian suy luận (latency) trên tập test chuẩn.
+            </p>
+
+            <div className="benchmark-trigger-row">
+              <select
+                className="benchmark-select"
+                value={selectedBenchmarkModel}
+                onChange={(e) => setSelectedBenchmarkModel(e.target.value)}
+              >
+                <option value="">-- Chọn mô hình cần kiểm định --</option>
+                {dbModels.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.name} {m.status === "active" ? "(ĐANG HOẠT ĐỘNG)" : m.status === "candidate" ? "(Ứng viên)" : "(Lưu trữ)"}
+                  </option>
+                ))}
+              </select>
+
+              <button
+                className="button primary"
+                type="button"
+                disabled={!selectedBenchmarkModel || !datasetStatus?.is_ready || runningBenchmarkId !== null}
+                onClick={triggerBenchmark}
+                style={{ padding: "0.65rem 1.4rem" }}
+              >
+                {runningBenchmarkId
+                  ? "Đang khởi chạy..."
+                  : !datasetStatus?.is_ready
+                  ? "Cần nạp tập test trước"
+                  : "Bắt đầu kiểm định trên tập test"}
+              </button>
+            </div>
+          </div>
+
+          {/* 3. Bảng so sánh Đối sánh Side-by-Side (nếu có kết quả so sánh) */}
+          {comparison && (
+            <div className="comparison-box">
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem" }}>
+                <div>
+                  <span className="eyebrow" style={{ color: "var(--color-fire)", fontWeight: 700 }}>
+                    KẾT QUẢ ĐỐI SÁNH TRỰC DIỆN
+                  </span>
+                  <h2 style={{ margin: "0.3rem 0" }}>
+                    {comparison.candidate.name} <span style={{ opacity: 0.5, fontWeight: 400 }}>vs</span> {comparison.base.name} (Active)
+                  </h2>
+                </div>
+                <button className="text-button" onClick={() => setComparison(null)}>
+                  Đóng đối sánh
+                </button>
+              </div>
+
+              <div className={`comparison-verdict-banner ${comparison.comparison.verdict}`}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <strong style={{ fontSize: "1.05rem" }}>{comparison.comparison.verdict_text}</strong>
+                </div>
+                {comparison.comparison.verdict === "improved" && (
+                  <button
+                    className="button primary"
+                    onClick={() => {
+                      const cand = dbModels.find((m) => m.id === comparison.candidate.id);
+                      if (cand) void activateModel(cand);
+                    }}
+                    style={{ fontSize: "0.85rem", padding: "0.4rem 1rem" }}
+                  >
+                    Kích hoạt mô hình này ngay
+                  </button>
+                )}
+              </div>
+
+              {/* Bảng so sánh tổng thể */}
+              <div className="table-scroll" style={{ marginBottom: "1.5rem" }}>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Chỉ số</th>
+                      <th>Mô hình cơ sở (Active)</th>
+                      <th>Mô hình ứng viên (Candidate)</th>
+                      <th>Chênh lệch</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>mAP@0.5</strong></td>
+                      <td>{(comparison.comparison.overall.map50.base * 100).toFixed(1)}%</td>
+                      <td><strong>{(comparison.comparison.overall.map50.candidate * 100).toFixed(1)}%</strong></td>
+                      <td>
+                        <span className={`delta-badge ${comparison.comparison.overall.map50.delta > 0 ? "positive" : comparison.comparison.overall.map50.delta < 0 ? "negative" : "neutral"}`}>
+                          {comparison.comparison.overall.map50.delta > 0 ? "+" : ""}
+                          {(comparison.comparison.overall.map50.delta * 100).toFixed(1)}% ({comparison.comparison.overall.map50.pct > 0 ? "+" : ""}{comparison.comparison.overall.map50.pct}%)
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>mAP@0.5:0.95</strong></td>
+                      <td>{(comparison.comparison.overall.map50_95.base * 100).toFixed(1)}%</td>
+                      <td><strong>{(comparison.comparison.overall.map50_95.candidate * 100).toFixed(1)}%</strong></td>
+                      <td>
+                        <span className={`delta-badge ${comparison.comparison.overall.map50_95.delta > 0 ? "positive" : comparison.comparison.overall.map50_95.delta < 0 ? "negative" : "neutral"}`}>
+                          {comparison.comparison.overall.map50_95.delta > 0 ? "+" : ""}
+                          {(comparison.comparison.overall.map50_95.delta * 100).toFixed(1)}%
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Độ chính xác (Precision)</strong></td>
+                      <td>{(comparison.comparison.overall.precision.base * 100).toFixed(1)}%</td>
+                      <td>{(comparison.comparison.overall.precision.candidate * 100).toFixed(1)}%</td>
+                      <td>
+                        <span className={`delta-badge ${comparison.comparison.overall.precision.delta > 0 ? "positive" : comparison.comparison.overall.precision.delta < 0 ? "negative" : "neutral"}`}>
+                          {comparison.comparison.overall.precision.delta > 0 ? "+" : ""}
+                          {(comparison.comparison.overall.precision.delta * 100).toFixed(1)}%
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Độ nhạy (Recall)</strong></td>
+                      <td>{(comparison.comparison.overall.recall.base * 100).toFixed(1)}%</td>
+                      <td>{(comparison.comparison.overall.recall.candidate * 100).toFixed(1)}%</td>
+                      <td>
+                        <span className={`delta-badge ${comparison.comparison.overall.recall.delta > 0 ? "positive" : comparison.comparison.overall.recall.delta < 0 ? "negative" : "neutral"}`}>
+                          {comparison.comparison.overall.recall.delta > 0 ? "+" : ""}
+                          {(comparison.comparison.overall.recall.delta * 100).toFixed(1)}%
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Độ trễ suy luận (ms/frame)</strong></td>
+                      <td>{comparison.comparison.overall.speed_ms.base} ms</td>
+                      <td>{comparison.comparison.overall.speed_ms.candidate} ms</td>
+                      <td>
+                        <span className={`delta-badge ${comparison.comparison.overall.speed_ms.delta < 0 ? "positive" : "neutral"}`}>
+                          {comparison.comparison.overall.speed_ms.delta > 0 ? "+" : ""}
+                          {comparison.comparison.overall.speed_ms.delta} ms
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Bảng so sánh từng lớp Khói & Lửa */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
+                <div style={{ background: "var(--bg-surface-subtle)", padding: "1rem", borderRadius: "var(--radius-md)", borderLeft: "4px solid var(--color-smoke)" }}>
+                  <h4 style={{ margin: "0 0 0.5rem 0", color: "var(--color-smoke)" }}>LỚP KHÓI (Smoke)</h4>
+                  <div style={{ fontSize: "0.88rem", display: "flex", flexDirection: "column", gap: "0.35rem" }}>
+                    <div>mAP50: <strong>{(comparison.comparison.classes.khoi.candidate.map50 * 100).toFixed(1)}%</strong> <span className="muted">(cũ: {(comparison.comparison.classes.khoi.base.map50 * 100).toFixed(1)}%)</span></div>
+                    <div>Precision: <strong>{(comparison.comparison.classes.khoi.candidate.precision * 100).toFixed(1)}%</strong></div>
+                    <div>Recall: <strong>{(comparison.comparison.classes.khoi.candidate.recall * 100).toFixed(1)}%</strong></div>
+                  </div>
+                </div>
+
+                <div style={{ background: "var(--bg-surface-subtle)", padding: "1rem", borderRadius: "var(--radius-md)", borderLeft: "4px solid var(--color-fire)" }}>
+                  <h4 style={{ margin: "0 0 0.5rem 0", color: "var(--color-fire)" }}>LỚP LỬA (Fire)</h4>
+                  <div style={{ fontSize: "0.88rem", display: "flex", flexDirection: "column", gap: "0.35rem" }}>
+                    <div>mAP50: <strong>{(comparison.comparison.classes.lua.candidate.map50 * 100).toFixed(1)}%</strong> <span className="muted">(cũ: {(comparison.comparison.classes.lua.base.map50 * 100).toFixed(1)}%)</span></div>
+                    <div>Precision: <strong>{(comparison.comparison.classes.lua.candidate.precision * 100).toFixed(1)}%</strong></div>
+                    <div>Recall: <strong>{(comparison.comparison.classes.lua.candidate.recall * 100).toFixed(1)}%</strong></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 4. Lịch sử các lần Benchmark */}
+          <div className="benchmark-card">
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+              <div>
+                <h3 style={{ margin: 0 }}>Lịch sử các đợt kiểm định</h3>
+                <p className="muted small" style={{ margin: 0 }}>Danh sách các lần chạy benchmark trên tập dữ liệu kiểm thử.</p>
+              </div>
+              <button className="button secondary" onClick={loadBenchmarks} disabled={loadingBenchmarks}>
+                {loadingBenchmarks ? "Đang tải..." : "Làm mới lịch sử"}
+              </button>
+            </div>
+
+            {benchmarks.length === 0 ? (
+              <p className="muted" style={{ padding: "1.5rem 0", textAlign: "center" }}>
+                Chưa có lượt kiểm định nào. Hãy chọn một mô hình ở trên và bấm "Bắt đầu kiểm định".
+              </p>
+            ) : (
+              <div className="table-scroll">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Mô hình</th>
+                      <th>Thời gian</th>
+                      <th>Trạng thái</th>
+                      <th>Số ảnh test</th>
+                      <th>mAP@0.5</th>
+                      <th>mAP@0.5:0.95</th>
+                      <th>FPS</th>
+                      <th>Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {benchmarks.map((b) => (
+                      <tr key={b.id}>
+                        <td>
+                          <strong>{b.model_name || "Mô hình #" + b.model_version_id.slice(0, 8)}</strong>
+                        </td>
+                        <td>{formatDate(b.created_at)}</td>
+                        <td>
+                          <span className={`status ${b.status === "completed" ? "completed" : b.status === "failed" ? "failed" : "running"}`}>
+                            {b.status === "completed" ? "● Hoàn tất" : b.status === "failed" ? "● Thất bại" : "● Đang đánh giá..."}
+                          </span>
+                        </td>
+                        <td>{b.image_count || b.metrics_summary?.dataset_info?.image_count || "—"}</td>
+                        <td>
+                          {b.metrics_summary?.overall?.map50 !== undefined ? (
+                            <strong style={{ color: "var(--color-fire)" }}>
+                              {(b.metrics_summary.overall.map50 * 100).toFixed(1)}%
+                            </strong>
+                          ) : "—"}
+                        </td>
+                        <td>
+                          {b.metrics_summary?.overall?.map50_95 !== undefined ? (
+                            `${(b.metrics_summary.overall.map50_95 * 100).toFixed(1)}%`
+                          ) : "—"}
+                        </td>
+                        <td>
+                          {b.metrics_summary?.speed?.fps ? `${b.metrics_summary.speed.fps} fps` : "—"}
+                        </td>
+                        <td>
+                          {b.status === "completed" && (
+                            <button
+                              className="text-button"
+                              disabled={comparingCandidateId === b.model_version_id}
+                              onClick={() => compareWithActive(b.model_version_id)}
+                            >
+                              {comparingCandidateId === b.model_version_id ? "Đang đối sánh..." : "So sánh với Active"}
+                            </button>
+                          )}
+                          {b.status === "failed" && (
+                            <span className="small danger-text" title={b.error_message || ""}>
+                              {b.error_message ? b.error_message.slice(0, 24) + "..." : "Lỗi"}
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {tab === "manual" && (
+        <form className="candidate-form stack-form" onSubmit={submitManual}>
+          <label>
+            Tên phiên bản
+            <input
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              required
+              placeholder="Ví dụ: yolo11n-v7-candidate"
+            />
+          </label>
+          <label>
+            Checkpoint .pt
+            <input
+              type="file"
+              accept=".pt"
+              onChange={(event) => setFile(event.target.files?.[0] || null)}
+              required
+            />
+          </label>
+          <label>
+            Báo cáo metrics dạng JSON
+            <textarea
+              value={metrics}
+              onChange={(event) => setMetrics(event.target.value)}
+              rows={9}
+              required
+              placeholder='{"test_mAP50": 0.75, "negative_video_false_events": 0}'
+            />
+          </label>
+          <p className="small muted">
+            Bao gồm kết quả trên video âm tính và độ trễ cảnh báo. Bạn có thể kích hoạt tại tab "Phiên bản & Rollback".
+          </p>
+          <button className="button primary" disabled={busy}>
+            {busy ? "Đang tải..." : "Đăng ký ứng viên"}
+          </button>
+        </form>
+      )}
+    </div>
+  );
 }
+
+
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -1181,7 +2152,7 @@ export default function App() {
     { area: "accounts", label: "Tài khoản", role: "admin_ops" },
     { area: "versions", label: "Phiên bản mô hình", role: "admin_ops" },
     { area: "reviews", label: "Phản hồi sai", role: "admin_model" },
-    { area: "candidates", label: "Mô hình ứng viên", role: "admin_model" },
+    { area: "candidates", label: "Quản lý mô hình", role: "admin_model" },
   ];
 
   return <div className="app-shell">

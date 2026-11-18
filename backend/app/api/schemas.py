@@ -90,4 +90,17 @@ class FeedbackReviewInput(BaseModel):
 
 
 class ModelActivateInput(BaseModel):
-    reason: str = Field(min_length=5, max_length=500)
+    reason: str = Field(default="Kích hoạt bởi Admin Model", max_length=500)
+
+
+class MlflowImportInput(BaseModel):
+    run_id: str = Field(min_length=1, max_length=100)
+    model_name: str = Field(min_length=1, max_length=120)
+    artifact_path: str = Field(default="", max_length=200)
+    activate_now: bool = Field(default=True)
+
+
+class BenchmarkRunInput(BaseModel):
+    model_id: str = Field(min_length=1, max_length=50)
+
+

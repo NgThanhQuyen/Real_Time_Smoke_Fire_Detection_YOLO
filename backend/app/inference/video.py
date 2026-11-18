@@ -1,9 +1,26 @@
 from __future__ import annotations
 
+import os
+import sys
+from pathlib import Path
+
+# Đảm bảo PyTorch nạp trước OpenCV (cv2)
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+_torch_lib = Path(sys.prefix) / "Lib" / "site-packages" / "torch" / "lib"
+if _torch_lib.is_dir() and hasattr(os, "add_dll_directory"):
+    try:
+        os.add_dll_directory(str(_torch_lib))
+    except Exception:
+        pass
+try:
+    import torch
+    from ultralytics import YOLO
+except Exception:
+    pass
+
 import logging
 import subprocess
 import time
-from pathlib import Path
 
 import cv2
 import imageio_ffmpeg
@@ -116,10 +133,12 @@ def process_video(db: Session, job: VideoJob, version: ModelVersion) -> None:
         cap.release()
         raise ValueError("Metadata video nguồn không hợp lệ")
     model = YOLO(str(model_file(version)))
-    names = {int(key): value for key, value in model.names.items()}
-    if names != {0: "khoi", 1: "lua"}:
+    names = {int(key): str(value).lower() for key, value in model.names.items()}
+    is_vn = names.get(0) == "khoi" and names.get(1) == "lua"
+    is_en = names.get(0) == "smoke" and names.get(1) == "fire"
+    if not (is_vn or is_en):
         cap.release()
-        raise ValueError("Checkpoint không khớp lớp khoi/lua")
+        raise ValueError("Checkpoint không khớp hai lớp khói/lửa (hỗ trợ khoi/lua hoặc smoke/fire)")
     render_width, render_height = output_size(width, height)
     encoder = start_encoder(output, render_width, render_height, fps)
     smoother = AlertSmoother(

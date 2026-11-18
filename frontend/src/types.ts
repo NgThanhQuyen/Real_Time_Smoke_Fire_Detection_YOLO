@@ -143,3 +143,102 @@ export type Profile = {
   address: string | null;
   zalo_status: "unconfigured" | "saved" | "verified";
 };
+
+export type MlflowStatus = {
+  configured: boolean;
+  connected: boolean;
+  message: string;
+  tracking_uri: string;
+};
+
+export type MlflowRun = {
+  run_id: string;
+  run_name: string;
+  status: string;
+  start_time: string | null;
+  params: Record<string, string>;
+  metrics: Record<string, number>;
+  has_checkpoint: boolean;
+  checkpoint_path: string;
+  is_imported: boolean;
+};
+
+export type DatasetStatus = {
+  is_ready: boolean;
+  images_count: number;
+  labels_count: number;
+  total_mb: number;
+  folder_path: string;
+  images_dir: string | null;
+  labels_dir: string | null;
+  yaml_path: string | null;
+  recommended_count: number;
+};
+
+export type ClassMetric = {
+  precision: number;
+  recall: number;
+  map50: number;
+  map50_95: number;
+};
+
+export type BenchmarkMetricsSummary = {
+  overall: {
+    precision: number;
+    recall: number;
+    map50: number;
+    map50_95: number;
+    f1: number;
+  };
+  classes: {
+    khoi: ClassMetric;
+    lua: ClassMetric;
+  };
+  speed: {
+    preprocess_ms: number;
+    inference_ms: number;
+    loss_ms: number;
+    postprocess_ms: number;
+    total_duration_s: number;
+    fps: number;
+  };
+  dataset_info: {
+    image_count: number;
+    labels_count: number;
+  };
+};
+
+export type BenchmarkRun = {
+  id: string;
+  model_version_id: string;
+  model_name: string | null;
+  dataset_name: string;
+  status: "queued" | "running" | "completed" | "failed";
+  image_count: number;
+  metrics_summary: BenchmarkMetricsSummary;
+  error_message: string | null;
+  created_by: string | null;
+  created_at: string;
+  completed_at: string | null;
+};
+
+export type BenchmarkComparison = {
+  candidate: { id: string; name: string; benchmark_id: string; completed_at: string };
+  base: { id: string; name: string; benchmark_id: string; completed_at: string };
+  comparison: {
+    verdict: "improved" | "regressed" | "comparable";
+    verdict_text: string;
+    overall: {
+      map50: { candidate: number; base: number; delta: number; pct: number };
+      map50_95: { candidate: number; base: number; delta: number };
+      precision: { candidate: number; base: number; delta: number };
+      recall: { candidate: number; base: number; delta: number };
+      speed_ms: { candidate: number; base: number; delta: number };
+    };
+    classes: {
+      khoi: { candidate: ClassMetric; base: ClassMetric; delta_map50: number };
+      lua: { candidate: ClassMetric; base: ClassMetric; delta_map50: number };
+    };
+  };
+};
+

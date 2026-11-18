@@ -273,3 +273,21 @@ class AuditLog(Base):
     target_id: Mapped[str] = mapped_column(String(50))
     metadata_json: Mapped[dict] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+
+class BenchmarkRun(Base):
+    __tablename__ = "benchmark_runs"
+    __table_args__ = (Index("ix_benchmark_runs_model_created", "model_version_id", "created_at"),)
+
+    id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)
+    model_version_id: Mapped[str] = mapped_column(ForeignKey("model_versions.id", ondelete="CASCADE"), index=True)
+    dataset_name: Mapped[str] = mapped_column(String(100), default="golden_test")
+    status: Mapped[str] = mapped_column(String(20), default="queued", index=True)
+    image_count: Mapped[int] = mapped_column(Integer, default=0)
+    metrics_summary: Mapped[dict] = mapped_column(JSON, default=dict)
+    error_message: Mapped[str | None] = mapped_column(String(1000), nullable=True)
+    created_by: Mapped[str | None] = mapped_column(ForeignKey("users.id"), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    model_version: Mapped[ModelVersion] = relationship()
