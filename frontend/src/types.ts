@@ -242,3 +242,32 @@ export type BenchmarkComparison = {
   };
 };
 
+export type RetrainRun = {
+  id: string;
+  kernel_slug: string;
+  status: "queued" | "running" | "completed" | "failed";
+  feedback_count: number;
+  base_model_name: string;
+  kaggle_status: string | null;
+  mlflow_run_id: string | null;
+  error_message: string | null;
+  created_by: string | null;
+  created_at: string;
+  completed_at: string | null;
+  kaggle_url: string;
+};
+
+export type RetrainStats = {
+  accepted_total: number;
+  hard_negatives: number;
+  hard_positives: number;
+  total_boxes: number;
+  pending_reviews: number;
+  active_model_name: string;
+  active_model_id: string | null;
+  kaggle_configured: boolean;
+  kaggle_username: string;
+  latest_run: RetrainRun | null;
+};
+
+

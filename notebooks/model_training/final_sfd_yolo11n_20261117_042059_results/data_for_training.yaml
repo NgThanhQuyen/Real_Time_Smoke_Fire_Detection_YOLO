@@ -1,0 +1,8 @@
+path: /kaggle/working/final_sfd_yolo11n_20261117_042059/dataset_local
+train: images/train
+val: images/val
+test: images/test
+nc: 2
+names:
+  0: smoke
+  1: fire

@@ -1,0 +1,10 @@
+{
+  "split": "test",
+  "confidence": 0.29,
+  "nms_iou": 0.5,
+  "device": "cpu",
+  "batch": 1,
+  "background_images": 772,
+  "images_with_detection": 54,
+  "image_false_positive_rate": 0.06994818652849741
+}

@@ -1,0 +1,15 @@
+image,ground_truth_category,detections,annotated_file
+dbafire_dbafire_01973.jpg,fire_only,1,dbafire_dbafire_01973.jpg
+dfire_AoF07745.jpg,fire_only,2,dfire_AoF07745.jpg
+dbafire_dbafire_02873.jpg,smoke_only,1,dbafire_dbafire_02873.jpg
+dfire_AoF08357.jpg,smoke_only,1,dfire_AoF08357.jpg
+dfire_WEB11617.jpg,both,2,dfire_WEB11617.jpg
+dfire_WEB11439.jpg,both,2,dfire_WEB11439.jpg
+flame_resized_test_nofire_frame114.jpg,background,0,flame_resized_test_nofire_frame114.jpg
+dfire_WEB09977.jpg,background,1,dfire_WEB09977.jpg
+dfire_WEB11009.jpg,both,1,dfire_WEB11009.jpg
+dfire_WEB10041.jpg,fire_only,0,dfire_WEB10041.jpg
+dfire_WEB11444.jpg,both,1,dfire_WEB11444.jpg
+dfire_PublicDataset01166.jpg,both,0,dfire_PublicDataset01166.jpg
+dfire_WEB10401.jpg,background,2,dfire_WEB10401.jpg
+dfire_AoF07561.jpg,background,1,dfire_AoF07561.jpg

@@ -104,3 +104,8 @@ class BenchmarkRunInput(BaseModel):
     model_id: str = Field(min_length=1, max_length=50)
 
 
+class RetrainTriggerInput(BaseModel):
+    epochs: int = Field(default=25, ge=5, le=100)
+
+
+

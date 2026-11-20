@@ -1,0 +1,19 @@
+TÓM TẮT SỐ LIỆU DATASET — FinalSFD_YOLO_Dataset
+==================================================
+
+PHÂN BỐ LOẠI ẢNH THEO TỪNG TẬP:
+       fire_only  smoke_only  both  background  total
+train       2254        4454  3927        2658  13293
+val          397         785   692         468   2342
+test         647        1327  1111         772   3857
+
+ĐÓNG GÓP THEO TỪNG NGUỒN GỐC:
+       D-Fire  BoWFire  FLAME  DBA-Fire  total
+train    9310       85   1244      2654  13293
+val      1641       11    223       467   2342
+test     2687       11    375       784   3857
+
+TỈ LỆ MẤT CÂN BẰNG SMOKE:FIRE THEO TỪNG TẬP:
+  train: Fire=6181, Smoke=8381, Tỉ lệ Smoke:Fire = 1.36:1
+  val: Fire=1089, Smoke=1477, Tỉ lệ Smoke:Fire = 1.36:1
+  test: Fire=1758, Smoke=2438, Tỉ lệ Smoke:Fire = 1.39:1

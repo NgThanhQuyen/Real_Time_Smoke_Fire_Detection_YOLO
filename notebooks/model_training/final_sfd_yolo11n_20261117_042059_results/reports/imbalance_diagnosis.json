@@ -1,0 +1,10 @@
+{
+  "fire_present_images": 6181,
+  "smoke_present_images": 8381,
+  "smoke_to_fire_image_ratio": 1.3559294612522246,
+  "fire_boxes": 13706,
+  "smoke_boxes": 10024,
+  "fire_to_smoke_box_ratio": 1.3673184357541899,
+  "median_fire_box_area": 0.007918836805555557,
+  "median_smoke_box_area": 0.14294912855905556
+}

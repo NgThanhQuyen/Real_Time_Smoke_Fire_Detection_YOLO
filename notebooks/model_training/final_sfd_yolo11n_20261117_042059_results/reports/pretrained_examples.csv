@@ -1,0 +1,9 @@
+image,true_category,coco_predictions,annotated_file
+dbafire_dbafire_01653.jpg,fire_only,car,dbafire_dbafire_01653.jpg
+dfire_WEB05999.jpg,fire_only,,dfire_WEB05999.jpg
+dfire_PublicDataset00802.jpg,smoke_only,,dfire_PublicDataset00802.jpg
+dbafire_dbafire_02632.jpg,smoke_only,surfboard,dbafire_dbafire_02632.jpg
+dfire_WEB03851.jpg,both,,dfire_WEB03851.jpg
+dfire_WEB06205.jpg,both,person,dfire_WEB06205.jpg
+flame_lake_resized_lake_frame1021.jpg,background,,flame_lake_resized_lake_frame1021.jpg
+dfire_WEB02365.jpg,background,,dfire_WEB02365.jpg

@@ -1,0 +1,4 @@
+,D-Fire,BoWFire,FLAME,DBA-Fire,total
+train,9310,85,1244,2654,13293
+val,1641,11,223,467,2342
+test,2687,11,375,784,3857

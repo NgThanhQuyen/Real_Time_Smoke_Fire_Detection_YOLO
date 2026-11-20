@@ -1,0 +1,9 @@
+image,ground_truth,pretrained_coco_predictions,finetuned_predictions
+dbafire_dbafire_01653.jpg,fire_only,car,fire
+dfire_WEB05999.jpg,fire_only,,"fire, fire"
+dfire_PublicDataset00802.jpg,smoke_only,,smoke
+dbafire_dbafire_02632.jpg,smoke_only,surfboard,smoke
+dfire_WEB03851.jpg,both,,"smoke, fire, fire"
+dfire_WEB06205.jpg,both,person,smoke
+flame_lake_resized_lake_frame1021.jpg,background,,
+dfire_WEB02365.jpg,background,,

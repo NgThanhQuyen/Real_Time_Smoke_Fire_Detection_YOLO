@@ -1,0 +1,38 @@
+[
+  {
+    "split": "train",
+    "images": 13293,
+    "fire_only": 2254,
+    "smoke_only": 4454,
+    "both": 3927,
+    "background": 2658,
+    "fire_present": 6181,
+    "smoke_present": 8381,
+    "fire_boxes": 13706,
+    "smoke_boxes": 10024
+  },
+  {
+    "split": "val",
+    "images": 2342,
+    "fire_only": 397,
+    "smoke_only": 785,
+    "both": 692,
+    "background": 468,
+    "fire_present": 1089,
+    "smoke_present": 1477,
+    "fire_boxes": 2392,
+    "smoke_boxes": 1736
+  },
+  {
+    "split": "test",
+    "images": 3857,
+    "fire_only": 647,
+    "smoke_only": 1327,
+    "both": 1111,
+    "background": 772,
+    "fire_present": 1758,
+    "smoke_present": 2438,
+    "fire_boxes": 3897,
+    "smoke_boxes": 2871
+  }
+]

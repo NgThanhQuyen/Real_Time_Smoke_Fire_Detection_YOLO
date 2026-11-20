@@ -11,10 +11,10 @@ from pathlib import Path
 import cv2
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile, status
 from fastapi.responses import FileResponse
-from sqlalchemy import func, select
+from sqlalchemy import delete, func, select
 from sqlalchemy.orm import Session, joinedload
 
-from ..config import RUNTIME, runtime_file
+from ..config import ROOT, RUNTIME, runtime_file
 from ..db import get_db
 from ..inference.geometry import output_size
 from ..media import stream_video
@@ -35,15 +35,29 @@ from ..models import (
     UserProfile,
     VideoJob,
     BenchmarkRun,
+    RetrainRun,
     new_id,
     utcnow,
 )
 from ..security import hash_password, require_role
 from ..serializers import benchmark_data, event_data, feedback_data, iso, job_data, model_data, user_data
 from ..serializers import realtime_event_data, realtime_session_data
-from ..mlflow_service import check_mlflow_connection, import_run_model, list_remote_runs
+from ..mlflow_service import check_mlflow_connection, delete_remote_run, import_run_model, list_remote_runs
 from ..benchmark_service import compare_benchmarks_metrics, get_dataset_status, start_benchmark
-from .schemas import BenchmarkRunInput, FeedbackReviewInput, MlflowImportInput, ModelActivateInput, UserUpdateInput
+from ..retrain_service import (
+    check_and_update_retrain_status,
+    get_retrain_statistics,
+    retrain_run_data,
+    trigger_kaggle_retrain,
+)
+from .schemas import (
+    BenchmarkRunInput,
+    FeedbackReviewInput,
+    MlflowImportInput,
+    ModelActivateInput,
+    RetrainTriggerInput,
+    UserUpdateInput,
+)
 
 
 
@@ -368,6 +382,37 @@ def model_admin_activate_model(
     reason = payload.reason if payload else "Kích hoạt bởi Admin Model"
     target = execute_model_activation(db, model_id, actor.id, reason)
     return model_data(target)
+
+
+@model_admin.delete("/models/{model_id}")
+def delete_model_version(
+    model_id: str,
+    actor: User = Depends(require_role("admin_model")),
+    db: Session = Depends(get_db),
+):
+    item = db.get(ModelVersion, model_id)
+    if not item:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Không tìm thấy mô hình")
+    if item.status == "active":
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Không thể xóa mô hình đang hoạt động (Active Model)")
+
+    # Xóa file weights nếu là file tải về hoặc upload riêng (trừ baseline gốc)
+    if item.artifact_path and not item.artifact_path.startswith("models/final_sfd_yolo11n"):
+        try:
+            p = Path(item.artifact_path)
+            if not p.is_absolute():
+                p = ROOT / p
+            if p.is_file():
+                p.unlink(missing_ok=True)
+        except Exception:
+            pass
+
+    # Xóa benchmark liên quan trước khi xóa model
+    db.execute(delete(BenchmarkRun).where(BenchmarkRun.model_version_id == model_id))
+    audit(db, actor.id, "model_version_deleted", "model_version", model_id, {"name": item.name})
+    db.delete(item)
+    db.commit()
+    return {"id": model_id, "deleted": True, "message": f"Đã xóa mô hình '{item.name}' thành công"}
 
 
 
@@ -696,6 +741,18 @@ def mlflow_import(
     )
 
 
+@model_admin.delete("/mlflow/runs/{run_id}")
+def delete_mlflow_run_endpoint(
+    run_id: str,
+    actor: User = Depends(require_role("admin_model")),
+    db: Session = Depends(get_db),
+):
+    res = delete_remote_run(run_id, db=db)
+    audit(db, actor.id, "mlflow_run_deleted", "mlflow_run", run_id, {"run_id": run_id})
+    db.commit()
+    return res
+
+
 @model_admin.get("/benchmarks/dataset-status")
 def benchmark_dataset_status(
     _actor: User = Depends(require_role("admin_model")),
@@ -744,6 +801,32 @@ def get_benchmark_detail(
     if not item:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Không tìm thấy lượt benchmark")
     return benchmark_data(item)
+
+
+@model_admin.delete("/benchmarks/{benchmark_id}")
+def delete_benchmark(
+    benchmark_id: str,
+    actor: User = Depends(require_role("admin_model")),
+    db: Session = Depends(get_db),
+):
+    item = db.get(BenchmarkRun, benchmark_id)
+    if not item:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Không tìm thấy lượt kiểm định")
+
+    report_file = runtime_file(f"benchmarks/{benchmark_id}/evaluation_report.json")
+    if report_file.exists():
+        try:
+            report_file.unlink()
+        except Exception:
+            pass
+
+    audit(db, actor.id, "benchmark_deleted", "benchmark_run", benchmark_id, {
+        "model_version_id": item.model_version_id,
+        "status": item.status,
+    })
+    db.delete(item)
+    db.commit()
+    return {"id": benchmark_id, "deleted": True, "message": "Đã xóa lượt kiểm định thành công"}
 
 
 @model_admin.get("/benchmarks/compare/{candidate_id}")
@@ -805,4 +888,65 @@ def compare_models_benchmark(
         },
         "comparison": comparison,
     }
+
+
+@model_admin.get("/retrain/stats")
+def retrain_stats(
+    _actor: User = Depends(require_role("admin_model")),
+    db: Session = Depends(get_db),
+):
+    return get_retrain_statistics(db)
+
+
+@model_admin.post("/retrain/trigger", status_code=201)
+def trigger_retrain(
+    payload: RetrainTriggerInput,
+    actor: User = Depends(require_role("admin_model")),
+    db: Session = Depends(get_db),
+):
+    try:
+        run = trigger_kaggle_retrain(db, actor_id=actor.id, epochs=payload.epochs)
+        return retrain_run_data(run)
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc))
+
+
+@model_admin.get("/retrain/runs")
+def list_retrain_runs(
+    _actor: User = Depends(require_role("admin_model")),
+    db: Session = Depends(get_db),
+):
+    runs = db.scalars(select(RetrainRun).order_by(RetrainRun.created_at.desc()).limit(50)).all()
+    return [retrain_run_data(r) for r in runs]
+
+
+@model_admin.get("/retrain/runs/{run_id}/status")
+def retrain_run_status(
+    run_id: str,
+    _actor: User = Depends(require_role("admin_model")),
+    db: Session = Depends(get_db),
+):
+    return check_and_update_retrain_status(run_id, db)
+
+
+@model_admin.delete("/retrain/runs/{run_id}")
+def delete_retrain_run(
+    run_id: str,
+    actor: User = Depends(require_role("admin_model")),
+    db: Session = Depends(get_db),
+):
+    run = db.get(RetrainRun, run_id)
+    if not run:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Không tìm thấy lượt huấn luyện")
+    if run.status in ["running", "queued"]:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Không thể xóa đợt huấn luyện đang chạy")
+
+    audit(db, actor.id, "retrain_run_deleted", "retrain_run", run_id, {
+        "kernel_slug": run.kernel_slug,
+        "kaggle_status": run.kaggle_status,
+    })
+    db.delete(run)
+    db.commit()
+    return {"id": run_id, "deleted": True, "message": "Đã xóa bản ghi huấn luyện thành công"}
+
 

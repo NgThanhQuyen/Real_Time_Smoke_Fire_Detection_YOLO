@@ -12,5 +12,12 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <!-- Trợ lý ảo RAG Flare Chat Widget -->
+    <script>
+      window.FlareChatWidgetConfig = {
+        apiUrl: "http://localhost:8001/api",
+      };
+    </script>
+    <script src="/widget.js?v=3" defer></script>
   </body>
 </html>

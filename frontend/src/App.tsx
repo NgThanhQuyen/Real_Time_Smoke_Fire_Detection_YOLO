@@ -2,7 +2,22 @@ import { useEffect, useRef, useState } from "react";
 import { api, className, formatDate, formatVideoTime, json } from "./api";
 import AnnotationEditor from "./AnnotationEditor";
 import type { AnnotationBox } from "./AnnotationEditor";
-import type { AdminEvent, AdminJob, BenchmarkComparison, BenchmarkRun, DatasetStatus, DetectedFrame, Detection, Feedback, MlflowRun, MlflowStatus, ModelVersion, Profile, RealtimeSession, User, VideoJob } from "./types";
+import type { AdminEvent, AdminJob, BenchmarkComparison, BenchmarkRun, DatasetStatus, DetectedFrame, Detection, Feedback, MlflowRun, MlflowStatus, ModelVersion, Profile, RealtimeSession, RetrainRun, RetrainStats, User, VideoJob } from "./types";
+
+declare global {
+  interface Window {
+    FlareChatWidget?: {
+      setRole: (role: string, userId?: string | null) => void;
+      open?: () => void;
+      close?: () => void;
+      toggle?: () => void;
+      clear?: () => void;
+    };
+    flareWidget?: any;
+    flareWidgetInstance?: any;
+    FlareChatWidgetConfig?: Record<string, any>;
+  }
+}
 
 type Area = "videos" | "realtime" | "profile" | "events" | "jobs" | "accounts" | "versions" | "reviews" | "candidates";
 
@@ -447,6 +462,22 @@ function RealtimeView() {
   const pendingRef = useRef(false);
   const inferenceCountRef = useRef(0);
   const fpsWindowStartedRef = useRef(0);
+  const camFrameCountRef = useRef(0);
+  const camFpsWindowStartedRef = useRef(0);
+  const camFpsRef = useRef(30.0);
+  const aiFpsRef = useRef(0.0);
+  const aiLatencyRef = useRef<number | null>(null);
+  const modelNameRef = useRef("");
+  const [showOsd, setShowOsd] = useState(true);
+  const showOsdRef = useRef(true);
+
+  function toggleOsd() {
+    setShowOsd((prev) => {
+      const next = !prev;
+      showOsdRef.current = next;
+      return next;
+    });
+  }
   const [starting, setStarting] = useState(false);
   const [running, setRunning] = useState(false);
   const [status, setStatus] = useState("Webcam chưa được bật.");
@@ -464,6 +495,61 @@ function RealtimeView() {
   const [feedbackComment, setFeedbackComment] = useState("");
   const [feedbackBusy, setFeedbackBusy] = useState(false);
   const feedbackNotice = useMessage();
+
+  const gridRef = useRef<HTMLDivElement>(null);
+  const rawPanelRef = useRef<HTMLElement>(null);
+  const predPanelRef = useRef<HTMLElement>(null);
+  const [fsMode, setFsMode] = useState<"none" | "both" | "raw" | "pred">("none");
+  const [facingMode, setFacingMode] = useState<"user" | "environment">("user");
+  const [viewMode, setViewMode] = useState<"both" | "pred" | "raw">("both");
+
+  useEffect(() => {
+    const handleFsChange = () => {
+      const el = document.fullscreenElement;
+      if (el === gridRef.current) setFsMode("both");
+      else if (el === rawPanelRef.current) setFsMode("raw");
+      else if (el === predPanelRef.current) setFsMode("pred");
+      else setFsMode("none");
+    };
+    document.addEventListener("fullscreenchange", handleFsChange);
+    return () => document.removeEventListener("fullscreenchange", handleFsChange);
+  }, []);
+
+  async function toggleFullscreen(target: "both" | "raw" | "pred") {
+    if (document.fullscreenElement) {
+      try {
+        await document.exitFullscreen();
+      } catch {}
+      setFsMode("none");
+      return;
+    }
+    let targetEl: HTMLElement | null = null;
+    if (target === "both") targetEl = gridRef.current;
+    else if (target === "raw") targetEl = rawPanelRef.current;
+    else if (target === "pred") targetEl = predPanelRef.current;
+
+    if (targetEl && targetEl.requestFullscreen) {
+      try {
+        await targetEl.requestFullscreen();
+        setFsMode(target);
+      } catch {
+        setFsMode((prev) => (prev === target ? "none" : target));
+      }
+    } else {
+      setFsMode((prev) => (prev === target ? "none" : target));
+    }
+  }
+
+  async function toggleCameraFacing() {
+    const nextFacing = facingMode === "user" ? "environment" : "user";
+    setFacingMode(nextFacing);
+    if (running) {
+      stop();
+      window.setTimeout(() => {
+        void start(nextFacing);
+      }, 350);
+    }
+  }
 
   async function refreshSessions() {
     try { setSessions(await api<RealtimeSession[]>("/api/realtime-sessions")); }
@@ -542,63 +628,191 @@ function RealtimeView() {
     let frameRequest = 0;
     let lastSentAt = 0;
     fpsWindowStartedRef.current = performance.now();
-    const video = videoRef.current;
-    const canvas = resultCanvasRef.current;
     const captureCanvas = document.createElement("canvas");
     captureCanvasRef.current = captureCanvas;
-    const context = canvas?.getContext("2d");
-    const captureContext = captureCanvas.getContext("2d");
 
     const render = (now: number) => {
-      if (video && canvas && context && video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      const video = videoRef.current;
+      const canvas = resultCanvasRef.current;
+
+      if (video && video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
         const width = video.videoWidth;
         const height = video.videoHeight;
-        if (width && height) {
-          if (canvas.width !== width || canvas.height !== height) {
-            canvas.width = width;
-            canvas.height = height;
-          }
-          context.drawImage(video, 0, 0, width, height);
-          context.lineWidth = Math.max(2, width / 480);
-          context.font = `700 ${Math.max(14, width / 38)}px Inter, Arial, sans-serif`;
-          for (const detection of detectionsRef.current) {
-            const [x1, y1, x2, y2] = detection.xyxy;
-            const color = detection.class_id === 0 ? "#3f8de7" : "#d95143";
-            const label = `${detection.class_id === 0 ? "Khói" : "Lửa"} ${Math.round(detection.confidence * 100)}%`;
-            context.strokeStyle = color;
-            context.fillStyle = color;
-            context.strokeRect(x1, y1, x2 - x1, y2 - y1);
-            const textWidth = context.measureText(label).width;
-            const textTop = Math.max(0, y1 - 28);
-            context.fillRect(x1, textTop, textWidth + 12, 27);
-            context.fillStyle = "#fff";
-            context.fillText(label, x1 + 6, textTop + 19);
+
+        if (width > 0 && height > 0) {
+          // 1. Luôn vẽ hình ảnh webcam và box dự đoán lên canvas nếu canvas đang có trong DOM
+          if (canvas) {
+            if (canvas.width !== width || canvas.height !== height) {
+              canvas.width = width;
+              canvas.height = height;
+            }
+            const context = canvas.getContext("2d");
+            if (context) {
+              context.drawImage(video, 0, 0, width, height);
+              context.lineWidth = Math.max(2, width / 480);
+              context.font = `700 ${Math.max(14, width / 38)}px Inter, Arial, sans-serif`;
+              for (const detection of detectionsRef.current) {
+                const [x1, y1, x2, y2] = detection.xyxy;
+                const color = detection.class_id === 0 ? "#3f8de7" : "#d95143";
+                const label = `${detection.class_id === 0 ? "Khói" : "Lửa"} ${Math.round(detection.confidence * 100)}%`;
+                context.strokeStyle = color;
+                context.fillStyle = color;
+                context.strokeRect(x1, y1, x2 - x1, y2 - y1);
+                const textWidth = context.measureText(label).width;
+                const textTop = Math.max(0, y1 - 28);
+                context.fillRect(x1, textTop, textWidth + 12, 27);
+                context.fillStyle = "#fff";
+                context.fillText(label, x1 + 6, textTop + 19);
+              }
+
+              // 1.2. Đo tốc độ hiển thị khung hình camera thực tế (Display FPS)
+              camFrameCountRef.current += 1;
+              if (now - camFpsWindowStartedRef.current >= 1000) {
+                camFpsRef.current = Math.round((camFrameCountRef.current * 1000) / (now - camFpsWindowStartedRef.current) * 10) / 10;
+                camFrameCountRef.current = 0;
+                camFpsWindowStartedRef.current = now;
+              }
+
+              // 1.3. Vẽ bảng chỉ số kỹ thuật OSD (On-Screen Display Telemetry HUD)
+              let osdBottomY = 0;
+              let osdRightX = 0;
+
+              if (showOsdRef.current) {
+                const osdPad = Math.max(8, Math.round(width / 75));
+                const osdFont = Math.max(11, Math.round(width / 58));
+                const osdLineH = Math.round(osdFont * 1.45);
+                const osdW = Math.min(width - 2 * osdPad, Math.max(260, Math.round(width * 0.42)));
+                const osdH = osdLineH * 5 + osdPad * 1.5;
+
+                osdBottomY = osdPad + osdH;
+                osdRightX = osdPad + osdW;
+
+                context.save();
+                context.beginPath();
+                context.fillStyle = "rgba(10, 15, 29, 0.88)";
+                context.strokeStyle = "rgba(56, 189, 248, 0.45)";
+                context.lineWidth = 1.5;
+                if (typeof (context as any).roundRect === "function") {
+                  (context as any).roundRect(osdPad, osdPad, osdW, osdH, 8);
+                } else {
+                  context.rect(osdPad, osdPad, osdW, osdH);
+                }
+                context.fill();
+                context.stroke();
+
+                context.font = `600 ${osdFont}px 'JetBrains Mono', Consolas, Monaco, monospace`;
+                context.textBaseline = "top";
+
+                const textX = osdPad + 10;
+                let textY = osdPad + 8;
+
+                // Dòng 1: Trạng thái Camera LIVE + Giờ thực tế
+                const timeStr = new Date().toLocaleTimeString();
+                context.fillStyle = "#22c55e";
+                context.fillText(`● CCTV LIVE · ${timeStr}`, textX, textY);
+                textY += osdLineH;
+
+                // Dòng 2: Display FPS & Độ phân giải camera
+                context.fillStyle = "#f8fafc";
+                context.fillText(`Display: ${camFpsRef.current.toFixed(1)} FPS | Cam: ${width}x${height}`, textX, textY);
+                textY += osdLineH;
+
+                // Dòng 3: AI Inference FPS & Độ trễ
+                context.fillStyle = "#38bdf8";
+                const latStr = aiLatencyRef.current !== null ? `${aiLatencyRef.current} ms` : "--";
+                context.fillText(`AI Rate: ${aiFpsRef.current.toFixed(1)} FPS | Latency: ${latStr}`, textX, textY);
+                textY += osdLineH;
+
+                // Dòng 4: Giao thức WebSocket & Tiết lưu 500ms
+                context.fillStyle = "#cbd5e1";
+                context.fillText(`Protocol: WebSocket | Throttle: 500ms`, textX, textY);
+                textY += osdLineH;
+
+                // Dòng 5: Tên model & Queue buffer
+                const modelDisplay = (modelNameRef.current || "YOLO11n").slice(0, 20);
+                context.fillStyle = "#fbbf24";
+                context.fillText(`Model: ${modelDisplay} | Queue: 0`, textX, textY);
+
+                context.restore();
+              }
+
+              // 1.4. Nếu có phát hiện Lửa hoặc Khói: Luôn vẽ badge cảnh báo nổi bật
+              if (detectionsRef.current.length > 0) {
+                const hasFire = detectionsRef.current.some((d) => d.class_id === 1);
+                const hasSmoke = detectionsRef.current.some((d) => d.class_id === 0);
+                const alertText = hasFire && hasSmoke ? "CẢNH BÁO: LỬA & KHÓI!" : hasFire ? "CẢNH BÁO: PHÁT HIỆN LỬA!" : "CẢNH BÁO: PHÁT HIỆN KHÓI!";
+
+                context.save();
+                context.font = `700 ${Math.max(12, Math.round(width / 44))}px Inter, Arial, sans-serif`;
+                const alertW = context.measureText(alertText).width + 24;
+                const alertH = Math.max(28, Math.round(width / 28));
+                const badgePad = Math.max(8, Math.round(width / 75));
+
+                let alertX = width - alertW - badgePad;
+                let alertY = badgePad;
+                if (showOsdRef.current && alertX < osdRightX + 12) {
+                  alertX = badgePad;
+                  alertY = osdBottomY + 8;
+                }
+
+                context.beginPath();
+                context.fillStyle = hasFire ? "#d95143" : "#3f8de7";
+                if (typeof (context as any).roundRect === "function") {
+                  (context as any).roundRect(alertX, alertY, alertW, alertH, 6);
+                } else {
+                  context.rect(alertX, alertY, alertW, alertH);
+                }
+                context.fill();
+
+                context.fillStyle = "#ffffff";
+                context.textBaseline = "middle";
+                context.fillText(alertText, alertX + 12, alertY + alertH / 2);
+                context.restore();
+              }
+            }
           }
 
-          if (socketRef.current?.readyState === WebSocket.OPEN && !pendingRef.current && now >= busyUntilRef.current && now - lastSentAt >= 500 && captureContext) {
-            const scale = Math.min(1, 960 / width, 960 / height);
-            const captureWidth = Math.max(1, Math.round(width * scale));
-            const captureHeight = Math.max(1, Math.round(height * scale));
-            captureCanvas.width = captureWidth;
-            captureCanvas.height = captureHeight;
-            captureContext.drawImage(video, 0, 0, captureWidth, captureHeight);
-            pendingRef.current = true;
-            lastSentAt = now;
-            captureCanvas.toBlob((blob) => {
-              if (!blob || socketRef.current?.readyState !== WebSocket.OPEN) {
-                pendingRef.current = false;
-                return;
+          // 2. Gửi khung hình qua WebSocket lên backend để suy luận YOLOv11
+          if (
+            socketRef.current?.readyState === WebSocket.OPEN &&
+            !pendingRef.current &&
+            now >= busyUntilRef.current &&
+            now - lastSentAt >= 500
+          ) {
+            const captureContext = captureCanvas.getContext("2d");
+            if (captureContext) {
+              const scale = Math.min(1, 960 / width, 960 / height);
+              const captureWidth = Math.max(1, Math.round(width * scale));
+              const captureHeight = Math.max(1, Math.round(height * scale));
+              if (captureCanvas.width !== captureWidth || captureCanvas.height !== captureHeight) {
+                captureCanvas.width = captureWidth;
+                captureCanvas.height = captureHeight;
               }
-              void blob.arrayBuffer().then((buffer) => {
-                if (socketRef.current?.readyState === WebSocket.OPEN) socketRef.current.send(buffer);
-                else pendingRef.current = false;
-              }).catch(() => { pendingRef.current = false; });
-            }, "image/jpeg", 0.72);
+              captureContext.drawImage(video, 0, 0, captureWidth, captureHeight);
+              pendingRef.current = true;
+              lastSentAt = now;
+              captureCanvas.toBlob((blob) => {
+                if (!blob || socketRef.current?.readyState !== WebSocket.OPEN) {
+                  pendingRef.current = false;
+                  return;
+                }
+                void blob.arrayBuffer().then((buffer) => {
+                  if (socketRef.current?.readyState === WebSocket.OPEN) {
+                    socketRef.current.send(buffer);
+                  } else {
+                    pendingRef.current = false;
+                  }
+                }).catch(() => {
+                  pendingRef.current = false;
+                });
+              }, "image/jpeg", 0.72);
+            }
           }
         }
       }
       frameRequest = window.requestAnimationFrame(render);
     };
+
     frameRequest = window.requestAnimationFrame(render);
     return () => {
       window.cancelAnimationFrame(frameRequest);
@@ -607,20 +821,31 @@ function RealtimeView() {
     };
   }, []);
 
-  async function start() {
+  async function start(activeFacing: "user" | "environment" = facingMode) {
     if (starting || running) return;
     setStarting(true);
     setError("");
     setLatency(null);
+    aiLatencyRef.current = null;
     setFps(null);
+    aiFpsRef.current = 0.0;
     setModelName("");
+    modelNameRef.current = "";
     setZaloNotice("Đang kiểm tra kết nối Zalo...");
     busyUntilRef.current = 0;
     pendingRef.current = false;
     detectionsRef.current = [];
     try {
       if (!navigator.mediaDevices?.getUserMedia) throw new Error("Trình duyệt không hỗ trợ webcam hoặc trang chưa chạy trên localhost/HTTPS.");
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { width: { ideal: 640 }, height: { ideal: 480 }, frameRate: { ideal: 15, max: 30 } } });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: false,
+        video: {
+          facingMode: { ideal: activeFacing },
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+          frameRate: { ideal: 15, max: 30 },
+        },
+      });
       streamRef.current = stream;
       const video = videoRef.current;
       if (!video) throw new Error("Không tìm thấy vùng xem camera.");
@@ -638,6 +863,7 @@ function RealtimeView() {
         if (message.type === "ready") {
           setStatus("Đang dự đoán trực tiếp từ webcam.");
           setModelName(message.model || "");
+          modelNameRef.current = message.model || "";
           setSessionId(message.session_id || "");
           setSessionStartedAt(message.session_started_at || new Date().toISOString());
           setZaloNotice(message.zalo_status === "verified"
@@ -655,11 +881,15 @@ function RealtimeView() {
             ...detection,
             xyxy: [detection.xyxy[0] * scaleX, detection.xyxy[1] * scaleY, detection.xyxy[2] * scaleX, detection.xyxy[3] * scaleY] as [number, number, number, number],
           }));
-          setLatency(message.latency_ms ?? null);
+          const currentLatency = message.latency_ms ?? null;
+          setLatency(currentLatency);
+          aiLatencyRef.current = currentLatency;
           inferenceCountRef.current += 1;
           const now = performance.now();
           if (now - fpsWindowStartedRef.current >= 2000) {
-            setFps(Math.round((inferenceCountRef.current * 1000 / (now - fpsWindowStartedRef.current)) * 10) / 10);
+            const calculatedFps = Math.round((inferenceCountRef.current * 1000 / (now - fpsWindowStartedRef.current)) * 10) / 10;
+            setFps(calculatedFps);
+            aiFpsRef.current = calculatedFps;
             inferenceCountRef.current = 0;
             fpsWindowStartedRef.current = now;
           }
@@ -702,7 +932,7 @@ function RealtimeView() {
   }
 
   return <div className="page realtime-page">
-    <div className="page-header"><div><p className="eyebrow">Dự đoán trực tiếp</p><h1>Webcam laptop</h1><p className="muted">Hai khung hình chạy liên tục: camera gốc và cùng luồng hình có box dự đoán. Máy chủ xử lý tối đa khoảng 2 khung hình mỗi giây; video xem trước vẫn chạy theo camera.</p></div></div>
+    <div className="page-header"><div><p className="eyebrow">Dự đoán trực tiếp</p><h1>Webcam &amp; Camera trực tiếp</h1><p className="muted">Hai khung hình chạy liên tục: camera gốc và cùng luồng hình có box dự đoán. Máy chủ xử lý tối đa khoảng 2 khung hình mỗi giây; video xem trước vẫn chạy theo camera.</p></div></div>
     <div className="realtime-toolbar">
       <div className="realtime-status-pill">
         <span className={`realtime-indicator ${running ? "on" : ""}`} />
@@ -713,16 +943,148 @@ function RealtimeView() {
         {latency !== null && <span className="metric-pill">Độ trễ: {latency} ms</span>}
         {fps !== null && <span className="metric-pill">Tốc độ: {fps} khung/giây</span>}
       </div>
+      <div className="segmented-control" role="group" aria-label="Chế độ hiển thị">
+        <button
+          type="button"
+          className={viewMode === "both" ? "active" : ""}
+          onClick={() => setViewMode("both")}
+          title="Xem đồng thời cả camera gốc và kết quả"
+        >
+          Cả 2
+        </button>
+        <button
+          type="button"
+          className={viewMode === "pred" ? "active" : ""}
+          onClick={() => setViewMode("pred")}
+          title="Chỉ xem luồng có box dự đoán"
+        >
+          Dự đoán
+        </button>
+        <button
+          type="button"
+          className={viewMode === "raw" ? "active" : ""}
+          onClick={() => setViewMode("raw")}
+          title="Chỉ xem camera gốc"
+        >
+          Camera
+        </button>
+      </div>
+      <button
+        type="button"
+        className="button secondary"
+        onClick={() => void toggleCameraFacing()}
+        title={facingMode === "user" ? "Đổi sang camera sau" : "Đổi sang camera trước"}
+        style={{ padding: "0.45rem 0.75rem", fontSize: "0.82rem" }}
+      >
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        <span>{facingMode === "user" ? "Cam trước" : "Cam sau"}</span>
+      </button>
+      <button
+        type="button"
+        className="button secondary"
+        onClick={() => void toggleFullscreen("both")}
+        title={fsMode === "both" ? "Thu nhỏ (Thoát toàn màn hình)" : "Toàn màn hình 2 khung"}
+        style={{ padding: "0.45rem 0.75rem", fontSize: "0.82rem" }}
+      >
+        {fsMode === "both" ? (
+          <>
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+            <span>Thu nhỏ</span>
+          </>
+        ) : (
+          <>
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+            <span>Toàn màn hình</span>
+          </>
+        )}
+      </button>
+      <button
+        type="button"
+        className={`button ${showOsd ? "secondary" : "ghost"}`}
+        onClick={toggleOsd}
+        title={showOsd ? "Tắt thông số CCTV OSD trên màn hình" : "Bật thông số CCTV OSD trên màn hình"}
+        style={{
+          padding: "0.45rem 0.75rem",
+          fontSize: "0.82rem",
+          borderColor: showOsd ? "rgba(56, 189, 248, 0.4)" : undefined,
+          color: showOsd ? "#38bdf8" : undefined,
+        }}
+      >
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+          <path d="M7 15h4M15 15h2M7 9h2M13 9h4" />
+        </svg>
+        <span>{showOsd ? "OSD: Bật" : "OSD: Tắt"}</span>
+      </button>
     </div>
     {error && <div className="notice error" role="alert">{error}</div>}
     <Notice message={feedbackNotice.message} error={feedbackNotice.error} />
-    <div className="realtime-grid">
-      <section className="realtime-panel">
-        <div className="realtime-panel-title"><h2>Camera gốc</h2><span>Trực tiếp</span></div>
+    <div ref={gridRef} className={`realtime-grid ${viewMode !== "both" ? "single-panel" : ""} ${fsMode === "both" ? "is-fullscreen-pseudo" : ""}`}>
+      {fsMode !== "none" && (
+        <div className="fullscreen-floating-bar">
+          <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: 600 }}>
+            {fsMode === "both" ? "Toàn màn hình: Cả 2 khung" : fsMode === "pred" ? "Toàn màn hình: Dự đoán" : "Toàn màn hình: Camera gốc"}
+          </span>
+          <button type="button" onClick={() => void toggleFullscreen(fsMode)}>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+            Thoát toàn màn hình (Esc)
+          </button>
+        </div>
+      )}
+      <section
+        ref={rawPanelRef}
+        className={`realtime-panel ${fsMode === "raw" ? "is-fullscreen-pseudo" : ""}`}
+        style={viewMode === "pred" ? { display: "none" } : undefined}
+      >
+        <div className="realtime-panel-title">
+          <h2>Camera gốc</h2>
+          <div className="panel-header-actions">
+            <span>{facingMode === "user" ? "Trực tiếp (Cam trước)" : "Trực tiếp (Cam sau)"}</span>
+            <button
+              type="button"
+              className="panel-fs-btn"
+              onClick={() => void toggleFullscreen("raw")}
+              title={fsMode === "raw" ? "Thu nhỏ camera gốc" : "Toàn màn hình camera gốc"}
+              aria-label="Toàn màn hình camera gốc"
+            >
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                {fsMode === "raw" ? (
+                  <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
+                ) : (
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                )}
+              </svg>
+            </button>
+          </div>
+        </div>
         <div className="realtime-screen"><video ref={videoRef} muted playsInline aria-label="Hình ảnh webcam gốc" /></div>
       </section>
-      <section className="realtime-panel">
-        <div className="realtime-panel-title"><h2>Kết quả dự đoán</h2><span>YOLOv11 Detection Stream</span></div>
+      <section
+        ref={predPanelRef}
+        className={`realtime-panel ${fsMode === "pred" ? "is-fullscreen-pseudo" : ""}`}
+        style={viewMode === "raw" ? { display: "none" } : undefined}
+      >
+        <div className="realtime-panel-title">
+          <h2>Kết quả dự đoán</h2>
+          <div className="panel-header-actions">
+            <span>YOLOv11 Detection</span>
+            <button
+              type="button"
+              className="panel-fs-btn"
+              onClick={() => void toggleFullscreen("pred")}
+              title={fsMode === "pred" ? "Thu nhỏ luồng dự đoán" : "Toàn màn hình luồng dự đoán"}
+              aria-label="Toàn màn hình luồng dự đoán"
+            >
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                {fsMode === "pred" ? (
+                  <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
+                ) : (
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                )}
+              </svg>
+            </button>
+          </div>
+        </div>
         <div className="realtime-screen"><canvas ref={resultCanvasRef} aria-label="Luồng webcam có box dự đoán" /></div>
       </section>
     </div>
@@ -1237,13 +1599,20 @@ function ReviewsView() {
 }
 
 function CandidatesView() {
-  const [tab, setTab] = useState<"mlflow" | "versions" | "benchmark" | "manual">("mlflow");
+  const [tab, setTab] = useState<"mlflow" | "retrain" | "benchmark" | "versions" | "manual">("mlflow");
   const [mlflowStatus, setMlflowStatus] = useState<MlflowStatus | null>(null);
   const [runs, setRuns] = useState<MlflowRun[]>([]);
   const [loadingRuns, setLoadingRuns] = useState(false);
   const [selectedRun, setSelectedRun] = useState<MlflowRun | null>(null);
   const [importModelName, setImportModelName] = useState("");
   const [importing, setImporting] = useState(false);
+
+  // Huấn luyện lại (Retrain Hub)
+  const [retrainStats, setRetrainStats] = useState<RetrainStats | null>(null);
+  const [retrainRuns, setRetrainRuns] = useState<RetrainRun[]>([]);
+  const [loadingRetrain, setLoadingRetrain] = useState(false);
+  const [triggeringRetrain, setTriggeringRetrain] = useState(false);
+  const [retrainEpochs, setRetrainEpochs] = useState(25);
 
   // Danh sách phiên bản trong DB & Kích hoạt / Rollback
   const [dbModels, setDbModels] = useState<ModelVersion[]>([]);
@@ -1349,9 +1718,40 @@ function CandidatesView() {
     }
   }
 
+  async function loadRetrainData() {
+    setLoadingRetrain(true);
+    try {
+      const [statsRes, runsRes] = await Promise.all([
+        api<RetrainStats>("/api/model-admin/retrain/stats"),
+        api<RetrainRun[]>("/api/model-admin/retrain/runs"),
+      ]);
+      setRetrainStats(statsRes);
+      setRetrainRuns(runsRes);
+    } catch (err) {
+      notice.fail(err);
+    } finally {
+      setLoadingRetrain(false);
+    }
+  }
+
+  async function triggerRetrain() {
+    setTriggeringRetrain(true);
+    try {
+      const res = await api<RetrainRun>("/api/model-admin/retrain/trigger", json("POST", { epochs: retrainEpochs }));
+      notice.success(`Đã kích hoạt huấn luyện trên Kaggle thành công! Kernel: ${res.kernel_slug}`);
+      await loadRetrainData();
+    } catch (err) {
+      notice.fail(err);
+    } finally {
+      setTriggeringRetrain(false);
+    }
+  }
+
   useEffect(() => {
     if (tab === "mlflow") {
       void loadMlflow();
+    } else if (tab === "retrain") {
+      void loadRetrainData();
     } else if (tab === "versions") {
       void loadDbModels();
     } else if (tab === "benchmark") {
@@ -1370,6 +1770,22 @@ function CandidatesView() {
     }, 3000);
     return () => clearInterval(interval);
   }, [tab, benchmarks]);
+
+  useEffect(() => {
+    if (tab !== "retrain") return;
+    const hasRunning = retrainRuns.some((r) => r.status === "running" || r.status === "queued");
+    if (!hasRunning) return;
+    const interval = setInterval(async () => {
+      const running = retrainRuns.find((r) => r.status === "running" || r.status === "queued");
+      if (running) {
+        try {
+          await api(`/api/model-admin/retrain/runs/${running.id}/status`);
+        } catch {}
+      }
+      void loadRetrainData();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [tab, retrainRuns]);
 
   function startImport(run: MlflowRun) {
     setSelectedRun(run);
@@ -1438,6 +1854,57 @@ function CandidatesView() {
     }
   }
 
+  async function deleteBenchmark(id: string) {
+    if (!confirm("Bạn có chắc chắn muốn xóa lượt kiểm định này không?")) return;
+    try {
+      await api(`/api/model-admin/benchmarks/${id}`, { method: "DELETE" });
+      notice.success("Đã xóa lượt kiểm định thành công.");
+      setBenchmarks((prev) => prev.filter((b) => b.id !== id));
+      if (comparison?.candidate?.benchmark_id === id || comparison?.base?.benchmark_id === id) {
+        setComparison(null);
+      }
+    } catch (err) {
+      notice.fail(err);
+    }
+  }
+
+  async function deleteMlflowRun(runId: string, runName: string) {
+    if (!confirm(`Bạn có chắc chắn muốn xóa lượt chạy "${runName}" trên DagsHub MLflow không?`)) return;
+    try {
+      await api(`/api/model-admin/mlflow/runs/${runId}`, { method: "DELETE" });
+      notice.success(`Đã xóa lượt chạy "${runName}" trên DagsHub MLflow.`);
+      setRuns((prev) => prev.filter((r) => r.run_id !== runId));
+    } catch (err) {
+      notice.fail(err);
+    }
+  }
+
+  async function deleteRetrainRun(runId: string) {
+    if (!confirm("Bạn có chắc chắn muốn xóa bản ghi lịch sử huấn luyện này không?")) return;
+    try {
+      await api(`/api/model-admin/retrain/runs/${runId}`, { method: "DELETE" });
+      notice.success("Đã xóa bản ghi huấn luyện thành công.");
+      setRetrainRuns((prev) => prev.filter((r) => r.id !== runId));
+    } catch (err) {
+      notice.fail(err);
+    }
+  }
+
+  async function deleteDbModel(modelId: string, modelName: string) {
+    if (!confirm(`Bạn có chắc chắn muốn xóa mô hình "${modelName}" không? Các kết quả kiểm định liên quan cũng sẽ được xóa.`)) return;
+    try {
+      await api(`/api/model-admin/models/${modelId}`, { method: "DELETE" });
+      notice.success(`Đã xóa mô hình "${modelName}" thành công.`);
+      setDbModels((prev) => prev.filter((m) => m.id !== modelId));
+      setBenchmarks((prev) => prev.filter((b) => b.model_version_id !== modelId));
+      if (selectedBenchmarkModel === modelId) {
+        setSelectedBenchmarkModel("");
+      }
+    } catch (err) {
+      notice.fail(err);
+    }
+  }
+
   return (
     <div className="page">
       <div className="page-header">
@@ -1457,6 +1924,13 @@ function CandidatesView() {
           type="button"
         >
           Đồng bộ DagsHub MLflow
+        </button>
+        <button
+          className={tab === "retrain" ? "active" : ""}
+          onClick={() => setTab("retrain")}
+          type="button"
+        >
+          Huấn luyện lại (Kaggle GPU)
         </button>
         <button
           className={tab === "benchmark" ? "active" : ""}
@@ -1571,8 +2045,8 @@ function CandidatesView() {
 import os
 import mlflow
 
-os.environ['MLFLOW_TRACKING_USERNAME'] = 'nguyenthanhquyen145'
-os.environ['MLFLOW_TRACKING_PASSWORD'] = '51f73bbb80d0249ca00102410fdf56b12dd8fc24'
+os.environ['MLFLOW_TRACKING_USERNAME'] = '<TÊN_TÀI_KHOẢN_DAGSHUB>'
+os.environ['MLFLOW_TRACKING_PASSWORD'] = '<TOKEN_HOẶC_MẬT_KHẨU_DAGSHUB>'
 mlflow.set_tracking_uri('https://dagshub.com/nguyenthanhquyen145/Real_Time_Smoke_Fire_Detection_YOLO.mlflow')
 
 # 3. Ghi kết quả sau khi train xong
@@ -1649,21 +2123,32 @@ with mlflow.start_run(run_name="yolo11n-kaggle-run-1"):
                         )}
                       </td>
                       <td>
-                        {run.is_imported ? (
-                          <span className="status active">Đã đăng ký</span>
-                        ) : run.has_checkpoint ? (
+                        <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                          {run.is_imported ? (
+                            <span className="status active">Đã đăng ký</span>
+                          ) : run.has_checkpoint ? (
+                            <button
+                              className="button primary"
+                              type="button"
+                              disabled={importing && selectedRun?.run_id === run.run_id}
+                              onClick={() => startImport(run)}
+                              style={{ fontSize: "0.82rem", padding: "0.45rem 0.9rem" }}
+                            >
+                              Tải về &amp; Kích hoạt
+                            </button>
+                          ) : (
+                            <span className="muted small">—</span>
+                          )}
                           <button
-                            className="button primary"
+                            className="button danger-outline"
                             type="button"
-                            disabled={importing && selectedRun?.run_id === run.run_id}
-                            onClick={() => startImport(run)}
-                            style={{ fontSize: "0.82rem", padding: "0.45rem 0.9rem" }}
+                            onClick={() => deleteMlflowRun(run.run_id, run.run_name)}
+                            title="Xóa lượt chạy này trên DagsHub MLflow"
+                            style={{ fontSize: "0.82rem", padding: "0.45rem 0.7rem" }}
                           >
-                            Tải về &amp; Kích hoạt
+                            Xóa
                           </button>
-                        ) : (
-                          <span className="muted small">—</span>
-                        )}
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -1671,6 +2156,196 @@ with mlflow.start_run(run_name="yolo11n-kaggle-run-1"):
               </table>
             </div>
           )}
+        </div>
+      )}
+
+      {tab === "retrain" && (
+        <div className="retrain-panel">
+          {/* 1. Trạng thái kết nối Kaggle & Dữ liệu Baseline */}
+          <div className="retrain-header-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1.2rem" }}>
+            <div className="benchmark-card" style={{ margin: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
+                <span
+                  style={{
+                    display: "inline-block",
+                    width: 10,
+                    height: 10,
+                    borderRadius: "50%",
+                    background: retrainStats?.kaggle_configured ? "var(--color-success)" : "var(--color-warning)",
+                  }}
+                />
+                <h3 style={{ margin: 0, fontSize: "1.05rem" }}>Kết nối Kaggle Cloud GPU</h3>
+              </div>
+              <p className="small muted" style={{ margin: 0 }}>
+                {retrainStats?.kaggle_configured ? (
+                  <>
+                    Đã cấu hình tài khoản Kaggle: <strong style={{ color: "#38bdf8" }}>{retrainStats.kaggle_username}</strong>. Sẵn sàng điều phối GPU T4/P100 từ xa.
+                  </>
+                ) : (
+                  <>Chưa cấu hình KAGGLE_USERNAME hoặc KAGGLE_KEY trong file .env.</>
+                )}
+              </p>
+            </div>
+
+            <div className="benchmark-card" style={{ margin: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
+                <span style={{ fontSize: "1.1rem" }}>🎯</span>
+                <h3 style={{ margin: 0, fontSize: "1.05rem" }}>Mô hình khởi điểm (Baseline)</h3>
+              </div>
+              <p className="small muted" style={{ margin: 0 }}>
+                Mô hình đang hoạt động: <strong style={{ color: "var(--color-fire)" }}>{retrainStats?.active_model_name}</strong>. Quá trình fine-tune sẽ kế thừa trọng số từ checkpoint này.
+              </p>
+            </div>
+          </div>
+
+          {/* 2. Thống kê kho dữ liệu phản hồi */}
+          <div className="benchmark-card">
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+              <div>
+                <h3 style={{ margin: "0 0 0.3rem 0" }}>Kho dữ liệu phản hồi đã kiểm duyệt</h3>
+                <p className="small muted" style={{ margin: 0 }}>
+                  Dữ liệu từ người dùng đã được Admin Model xác nhận toàn ảnh, sẵn sàng đưa vào Replay Buffer.
+                </p>
+              </div>
+              <button className="button secondary" onClick={loadRetrainData} disabled={loadingRetrain}>
+                {loadingRetrain ? "Đang tải..." : "Làm mới số liệu"}
+              </button>
+            </div>
+
+            <div className="dataset-info-chips">
+              <span className="dataset-chip">
+                Tổng mẫu đã duyệt: <strong>{retrainStats?.accepted_total ?? 0} ảnh</strong>
+              </span>
+              <span className="dataset-chip" title="Ảnh không có lửa/khói (Background) giúp mô hình dập tắt báo động nhầm">
+                Báo động nhầm (Hard Negatives): <strong>{retrainStats?.hard_negatives ?? 0} ảnh</strong>
+              </span>
+              <span className="dataset-chip" title="Ảnh có lửa/khói bị bỏ sót giúp mô hình tăng độ bao phủ (Recall)">
+                Bỏ sót (Hard Positives): <strong>{retrainStats?.hard_positives ?? 0} ảnh ({retrainStats?.total_boxes ?? 0} boxes)</strong>
+              </span>
+              <span className="dataset-chip">
+                Chờ duyệt: <strong>{retrainStats?.pending_reviews ?? 0} phản hồi</strong>
+              </span>
+            </div>
+          </div>
+
+          {/* 3. Bảng điều khiển kích hoạt huấn luyện trên Kaggle */}
+          <div className="benchmark-card" style={{ borderLeft: "4px solid var(--color-primary)" }}>
+            <h3 style={{ marginTop: 0, marginBottom: "0.4rem" }}>Kích hoạt huấn luyện trên Kaggle Cloud GPU</h3>
+            <p className="small muted" style={{ marginBottom: "1.2rem" }}>
+              Hệ thống sẽ tự động đóng gói dữ liệu phản hồi mới, sinh Notebook Continual Learning, kích hoạt container GPU trên Kaggle và tự động đẩy trọng số mới về DagsHub MLflow.
+            </p>
+
+            <div style={{ display: "flex", gap: "1.2rem", alignItems: "center", flexWrap: "wrap" }}>
+              <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", margin: 0 }}>
+                <span className="small muted">Số Epochs Fine-tuning:</span>
+                <input
+                  type="number"
+                  min={5}
+                  max={100}
+                  value={retrainEpochs}
+                  onChange={(e) => setRetrainEpochs(Number(e.target.value) || 25)}
+                  style={{ width: "80px", padding: "0.4rem 0.6rem" }}
+                  disabled={triggeringRetrain}
+                />
+              </label>
+
+              <button
+                className="button primary"
+                type="button"
+                disabled={
+                  triggeringRetrain ||
+                  !retrainStats?.kaggle_configured ||
+                  (retrainStats?.accepted_total ?? 0) === 0
+                }
+                onClick={triggerRetrain}
+                style={{ padding: "0.65rem 1.4rem" }}
+              >
+                {triggeringRetrain ? "Đang gửi lệnh sang Kaggle..." : "Bắt đầu huấn luyện lại trên Kaggle (GPU)"}
+              </button>
+
+              {(retrainStats?.accepted_total ?? 0) === 0 && (
+                <span className="small muted" style={{ color: "var(--color-warning)" }}>
+                  ⚠️ Cần duyệt ít nhất 1 phản hồi tại tab "Phản hồi sai" trước khi kích hoạt huấn luyện.
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* 4. Tiến trình & Lịch sử các lần Retrain */}
+          <div className="benchmark-card">
+            <h3 style={{ marginTop: 0, marginBottom: "0.5rem" }}>Lịch sử &amp; Tiến trình huấn luyện từ xa</h3>
+            {retrainRuns.length === 0 ? (
+              <p className="muted small">Chưa có lượt huấn luyện lại nào. Hãy bấm nút phía trên để kích hoạt lượt đầu tiên.</p>
+            ) : (
+              <div className="table-scroll">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Mã lượt chạy</th>
+                      <th>Mô hình cơ sở</th>
+                      <th>Mẫu feedback</th>
+                      <th>Thời gian</th>
+                      <th>Trạng thái Kaggle</th>
+                      <th>Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {retrainRuns.map((r) => (
+                      <tr key={r.id}>
+                        <td>
+                          <strong>{r.kernel_slug}</strong>
+                          <p className="small muted font-mono">{r.id.slice(0, 8)}</p>
+                        </td>
+                        <td>{r.base_model_name}</td>
+                        <td>
+                          <strong>{r.feedback_count}</strong> ảnh
+                        </td>
+                        <td>{formatDate(r.created_at)}</td>
+                        <td>
+                          <span className={`status ${r.status === "completed" ? "completed" : r.status === "failed" ? "failed" : "running"}`}>
+                            {r.kaggle_status ? r.kaggle_status.toUpperCase() : r.status.toUpperCase()}
+                          </span>
+                        </td>
+                        <td>
+                          <div style={{ display: "flex", gap: "0.5rem" }}>
+                            <a
+                              href={r.kaggle_url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="button secondary small"
+                              style={{ padding: "0.3rem 0.6rem", fontSize: "0.8rem" }}
+                            >
+                              Xem trên Kaggle ↗
+                            </a>
+                            {r.status === "completed" && (
+                              <button
+                                className="button primary small"
+                                style={{ padding: "0.3rem 0.6rem", fontSize: "0.8rem" }}
+                                onClick={() => setTab("mlflow")}
+                              >
+                                Tải từ MLflow ➔
+                              </button>
+                            )}
+                            {r.status !== "running" && r.status !== "queued" && (
+                              <button
+                                className="button danger-outline small"
+                                type="button"
+                                onClick={() => deleteRetrainRun(r.id)}
+                                title="Xóa bản ghi huấn luyện này"
+                                style={{ padding: "0.3rem 0.6rem", fontSize: "0.8rem" }}
+                              >
+                                Xóa
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         </div>
       )}
 
@@ -1711,23 +2386,33 @@ with mlflow.start_run(run_name="yolo11n-kaggle-run-1"):
                   </details>
                 </div>
 
-                <div style={{ display: "flex", alignItems: "center", marginLeft: "1rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginLeft: "1rem" }}>
                   {model.status === "active" ? (
                     <span className="status completed" style={{ padding: "0.45rem 1rem" }}>
                       ● Đang chạy
                     </span>
                   ) : (
-                    <button
-                      className="button secondary"
-                      disabled={activatingId === model.id}
-                      onClick={() => activateModel(model)}
-                    >
-                      {activatingId === model.id
-                        ? "Đang kích hoạt..."
-                        : model.status === "retired"
-                        ? "Rollback về bản này"
-                        : "Kích hoạt làm bản chính"}
-                    </button>
+                    <>
+                      <button
+                        className="button secondary"
+                        disabled={activatingId === model.id}
+                        onClick={() => activateModel(model)}
+                      >
+                        {activatingId === model.id
+                          ? "Đang kích hoạt..."
+                          : model.status === "retired"
+                          ? "Rollback về bản này"
+                          : "Kích hoạt làm bản chính"}
+                      </button>
+                      <button
+                        className="button danger-outline"
+                        type="button"
+                        onClick={() => deleteDbModel(model.id, model.name)}
+                        title="Xóa phiên bản này"
+                      >
+                        Xóa
+                      </button>
+                    </>
                   )}
                 </div>
               </article>
@@ -2026,20 +2711,30 @@ with mlflow.start_run(run_name="yolo11n-kaggle-run-1"):
                           {b.metrics_summary?.speed?.fps ? `${b.metrics_summary.speed.fps} fps` : "—"}
                         </td>
                         <td>
-                          {b.status === "completed" && (
+                          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                            {b.status === "completed" && (
+                              <button
+                                className="text-button"
+                                disabled={comparingCandidateId === b.model_version_id}
+                                onClick={() => compareWithActive(b.model_version_id)}
+                              >
+                                {comparingCandidateId === b.model_version_id ? "Đang đối sánh..." : "So sánh với Active"}
+                              </button>
+                            )}
+                            {b.status === "failed" && (
+                              <span className="small danger-text" title={b.error_message || ""}>
+                                {b.error_message ? b.error_message.slice(0, 24) + "..." : "Lỗi"}
+                              </span>
+                            )}
                             <button
-                              className="text-button"
-                              disabled={comparingCandidateId === b.model_version_id}
-                              onClick={() => compareWithActive(b.model_version_id)}
+                              className="text-button danger-text"
+                              onClick={() => deleteBenchmark(b.id)}
+                              title="Xóa lượt kiểm định này"
+                              style={{ marginLeft: "auto", fontSize: "0.82rem" }}
                             >
-                              {comparingCandidateId === b.model_version_id ? "Đang đối sánh..." : "So sánh với Active"}
+                              Xóa
                             </button>
-                          )}
-                          {b.status === "failed" && (
-                            <span className="small danger-text" title={b.error_message || ""}>
-                              {b.error_message ? b.error_message.slice(0, 24) + "..." : "Lỗi"}
-                            </span>
-                          )}
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -2100,6 +2795,37 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [area, setArea] = useState<Area>("videos");
 
+  // Theme management (dark / light)
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    const saved = localStorage.getItem("flare_theme");
+    return saved === "light" || saved === "dark" ? saved : "dark";
+  });
+
+  // Sidebar collapse management (desktop)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(() => {
+    return localStorage.getItem("flare_sidebar_collapsed") === "true";
+  });
+
+  // Mobile drawer menu management
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("flare_theme", theme);
+  }, [theme]);
+
+  function toggleTheme() {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  }
+
+  function toggleSidebar() {
+    setSidebarCollapsed((prev) => {
+      const next = !prev;
+      localStorage.setItem("flare_sidebar_collapsed", String(next));
+      return next;
+    });
+  }
+
   useEffect(() => {
     api<User>("/api/auth/me").then((value) => {
       setUser(value);
@@ -2112,9 +2838,50 @@ export default function App() {
     return () => window.removeEventListener("pageshow", resetRestoredPage);
   }, []);
 
+  // Đồng bộ phân quyền người dùng (Role-Based Access Control) & Tách biệt lịch sử chat theo tài khoản cho Flare AI Chatbot Widget
+  useEffect(() => {
+    const role = user
+      ? user.roles.includes("admin_ops")
+        ? "admin_ops"
+        : user.roles.includes("admin_model")
+          ? "admin_model"
+          : user.roles.includes("user")
+            ? "user"
+            : "guest"
+      : "guest";
+    const userId = user ? (user.id || user.username) : null;
+
+    const applyRole = () => {
+      const w = window.FlareChatWidget || (window as any).flareWidget || (window as any).flareWidgetInstance;
+      if (w && typeof w.setRole === "function") {
+        w.setRole(role, userId);
+        return true;
+      }
+      return false;
+    };
+
+    window.FlareChatWidgetConfig = {
+      ...window.FlareChatWidgetConfig,
+      role,
+      userId,
+    };
+
+    applyRole();
+    const t1 = setTimeout(applyRole, 250);
+    const t2 = setTimeout(applyRole, 800);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [user]);
+
   async function logout() {
     await api("/api/auth/logout", { method: "POST" });
     setUser(null);
+    const w = window.FlareChatWidget || (window as any).flareWidget || (window as any).flareWidgetInstance;
+    if (w && typeof w.setRole === "function") {
+      w.setRole("guest", null);
+    }
   }
 
   if (loading) return <div className="loading-page"><Brand /><p>Đang mở hệ thống...</p></div>;
@@ -2155,43 +2922,140 @@ export default function App() {
     { area: "candidates", label: "Quản lý mô hình", role: "admin_model" },
   ];
 
-  return <div className="app-shell">
-    <aside className="sidebar">
-      <div className="sidebar-top"><Brand /></div>
-      <nav aria-label="Điều hướng">
-        {navigation.filter((item) => user.roles.includes(item.role as never) && !(item.role === "user" && user.roles.some((role) => role.startsWith("admin_")))).map((item) => (
-          <button key={item.area} className={area === item.area ? "active" : ""} onClick={() => setArea(item.area)}>
-            {renderNavIcon(item.area)}
-            <span>{item.label}</span>
+  return (
+    <div className={`app-shell ${sidebarCollapsed ? "sidebar-collapsed" : ""}`}>
+      {/* Mobile Topbar */}
+      <header className="mobile-topbar">
+        <div className="mobile-topbar-left">
+          <button
+            type="button"
+            className="mobile-menu-btn"
+            onClick={() => setMobileMenuOpen(true)}
+            aria-label="Mở menu điều hướng"
+          >
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
           </button>
-        ))}
-      </nav>
-      <div className="sidebar-bottom">
-        <div className="sidebar-user-info">
-          <div className="sidebar-avatar" aria-hidden="true">
-            {(user.profile.full_name || user.username).charAt(0).toUpperCase()}
-          </div>
-          <div className="sidebar-user-details">
-            <strong>{user.profile.full_name || user.username}</strong>
-            <small>{user.roles.join(" · ")}</small>
-          </div>
+          <Brand />
         </div>
-        <button className="logout-button" onClick={logout}>
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-          Đăng xuất
+        <button
+          type="button"
+          className="theme-toggle-btn"
+          onClick={toggleTheme}
+          aria-label={theme === "dark" ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối"}
+          title={theme === "dark" ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối"}
+        >
+          {theme === "dark" ? (
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          ) : (
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          )}
         </button>
-      </div>
-    </aside>
-    <main className="content">
-      {area === "videos" && !user.roles.some((role) => role.startsWith("admin_")) && <VideosView />}
-      {area === "realtime" && !user.roles.some((role) => role.startsWith("admin_")) && <RealtimeView />}
-      {area === "profile" && !user.roles.some((role) => role.startsWith("admin_")) && <ProfileView />}
-      {area === "events" && <EventsView />}
-      {area === "jobs" && <AdminJobsView />}
-      {area === "accounts" && <AccountsView />}
-      {area === "versions" && <VersionsView />}
-      {area === "reviews" && <ReviewsView />}
-      {area === "candidates" && <CandidatesView />}
-    </main>
-  </div>;
+      </header>
+
+      {/* Backdrop for mobile drawer */}
+      {mobileMenuOpen && (
+        <div
+          className="sidebar-backdrop"
+          onClick={() => setMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Sidebar Navigation */}
+      <aside className={`sidebar ${sidebarCollapsed ? "collapsed" : ""} ${mobileMenuOpen ? "mobile-open" : ""}`}>
+        <div className="sidebar-top">
+          <Brand />
+          <button
+            type="button"
+            className="sidebar-toggle-btn"
+            onClick={toggleSidebar}
+            title={sidebarCollapsed ? "Mở rộng menu" : "Thu gọn menu"}
+            aria-label={sidebarCollapsed ? "Mở rộng menu" : "Thu gọn menu"}
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {sidebarCollapsed ? (
+                <polyline points="9 18 15 12 9 6" />
+              ) : (
+                <polyline points="15 18 9 12 15 6" />
+              )}
+            </svg>
+          </button>
+          <button
+            type="button"
+            className="mobile-close-btn"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-label="Đóng menu"
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        <nav aria-label="Điều hướng">
+          {navigation
+            .filter((item) => user.roles.includes(item.role as never) && !(item.role === "user" && user.roles.some((role) => role.startsWith("admin_"))))
+            .map((item) => (
+              <button
+                key={item.area}
+                className={area === item.area ? "active" : ""}
+                onClick={() => {
+                  setArea(item.area);
+                  setMobileMenuOpen(false);
+                }}
+                title={sidebarCollapsed ? item.label : undefined}
+              >
+                {renderNavIcon(item.area)}
+                <span>{item.label}</span>
+              </button>
+            ))}
+        </nav>
+
+        <div className="sidebar-bottom">
+          <button
+            type="button"
+            className="theme-toggle-sidebar-btn"
+            onClick={toggleTheme}
+            title={theme === "dark" ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối"}
+          >
+            {theme === "dark" ? (
+              <>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                <span>Chế độ sáng</span>
+              </>
+            ) : (
+              <>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <span>Chế độ tối</span>
+              </>
+            )}
+          </button>
+
+          <div className="sidebar-user-info">
+            <div className="sidebar-avatar" aria-hidden="true">
+              {(user.profile.full_name || user.username).charAt(0).toUpperCase()}
+            </div>
+            <div className="sidebar-user-details">
+              <strong>{user.profile.full_name || user.username}</strong>
+              <small>{user.roles.join(" · ")}</small>
+            </div>
+          </div>
+          <button className="logout-button" onClick={logout} title={sidebarCollapsed ? "Đăng xuất" : undefined}>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Đăng xuất</span>
+          </button>
+        </div>
+      </aside>
+
+      <main className="content">
+        {area === "videos" && !user.roles.some((role) => role.startsWith("admin_")) && <VideosView />}
+        {area === "realtime" && !user.roles.some((role) => role.startsWith("admin_")) && <RealtimeView />}
+        {area === "profile" && !user.roles.some((role) => role.startsWith("admin_")) && <ProfileView />}
+        {area === "events" && <EventsView />}
+        {area === "jobs" && <AdminJobsView />}
+        {area === "accounts" && <AccountsView />}
+        {area === "versions" && <VersionsView />}
+        {area === "reviews" && <ReviewsView />}
+        {area === "candidates" && <CandidatesView />}
+      </main>
+    </div>
+  );
 }

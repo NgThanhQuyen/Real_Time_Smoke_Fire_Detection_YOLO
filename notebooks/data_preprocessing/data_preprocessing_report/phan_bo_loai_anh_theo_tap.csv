@@ -1,0 +1,4 @@
+,fire_only,smoke_only,both,background,total
+train,2254,4454,3927,2658,13293
+val,397,785,692,468,2342
+test,647,1327,1111,772,3857

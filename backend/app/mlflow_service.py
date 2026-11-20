@@ -272,3 +272,37 @@ def import_run_model(
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)
 
+
+def delete_remote_run(run_id: str, db: Session) -> dict[str, Any]:
+    """Xóa một lượt chạy trên DagsHub MLflow (trừ khi đang là Active Model trong FLARE)."""
+    # 1. Kiểm tra xem run_id này có đang là model active không
+    active_model = db.scalar(
+        select(ModelVersion).where(ModelVersion.status == "active").limit(1)
+    )
+    if active_model and active_model.config and active_model.config.get("mlflow_run_id") == run_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Không thể xóa lượt chạy của Mô hình đang hoạt động (Active Model) trên hệ thống.",
+        )
+    if active_model and active_model.name == run_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Không thể xóa lượt chạy của Mô hình đang hoạt động (Active Model).",
+        )
+
+    # 2. Xóa trên DagsHub MLflow
+    client = get_client()
+    try:
+        client.delete_run(run_id)
+        return {
+            "run_id": run_id,
+            "deleted": True,
+            "message": f"Đã xóa lượt chạy {run_id[:8]} trên DagsHub MLflow",
+        }
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=f"Lỗi khi xóa lượt chạy từ DagsHub MLflow: {exc}",
+        )
+
+

@@ -1,0 +1,9 @@
+nms_iou,category,confidence,images,images_with_detection,detections
+0.3,background,0.29,80,1,1
+0.3,both,0.29,80,80,253
+0.5,background,0.29,80,1,1
+0.5,both,0.29,80,80,255
+0.7,background,0.29,80,1,1
+0.7,both,0.29,80,80,261
+0.9,background,0.29,80,1,1
+0.9,both,0.29,80,80,385

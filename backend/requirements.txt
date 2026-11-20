@@ -10,3 +10,4 @@ opencv-python>=4.10,<5
 ultralytics>=8.3.196,<9
 imageio-ffmpeg==0.6.0
 mlflow==2.18.0
+kaggle>=2.2.5

@@ -291,3 +291,19 @@ class BenchmarkRun(Base):
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     model_version: Mapped[ModelVersion] = relationship()
+
+
+class RetrainRun(Base):
+    __tablename__ = "retrain_runs"
+
+    id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)
+    kernel_slug: Mapped[str] = mapped_column(String(120), default="flare-retrain-yolo11n")
+    status: Mapped[str] = mapped_column(String(20), default="queued", index=True)
+    feedback_count: Mapped[int] = mapped_column(Integer, default=0)
+    base_model_name: Mapped[str] = mapped_column(String(100), default="final_sfd_yolo11n")
+    kaggle_status: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    mlflow_run_id: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    error_message: Mapped[str | None] = mapped_column(String(1000), nullable=True)
+    created_by: Mapped[str | None] = mapped_column(ForeignKey("users.id"), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

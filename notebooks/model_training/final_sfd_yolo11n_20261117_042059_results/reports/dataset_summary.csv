@@ -1,0 +1,4 @@
+split,images,fire_only,smoke_only,both,background,fire_present,smoke_present,fire_boxes,smoke_boxes
+train,13293,2254,4454,3927,2658,6181,8381,13706,10024
+val,2342,397,785,692,468,1089,1477,2392,1736
+test,3857,647,1327,1111,772,1758,2438,3897,2871

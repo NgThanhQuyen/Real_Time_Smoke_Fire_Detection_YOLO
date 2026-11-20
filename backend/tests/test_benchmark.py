@@ -75,3 +75,28 @@ def test_compare_benchmarks_metrics_regressed():
     assert res["verdict"] == "regressed"
     assert res["overall"]["map50"]["delta"] < 0
 
+
+def test_benchmark_run_db_lifecycle(tmp_path: Path):
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import sessionmaker
+    from backend.app.db import Base
+    from backend.app.models import BenchmarkRun, ModelVersion
+
+    engine = create_engine(f"sqlite:///{(tmp_path / 'bench.sqlite').as_posix()}")
+    Base.metadata.create_all(engine)
+    session_factory = sessionmaker(bind=engine, expire_on_commit=False)
+    with session_factory() as db:
+        m = ModelVersion(name="test_model", artifact_path="m.pt", sha256="0" * 64, class_map={"0": "khoi", "1": "lua"}, status="active")
+        db.add(m)
+        db.commit()
+
+        b = BenchmarkRun(model_version_id=m.id, status="completed", image_count=100)
+        db.add(b)
+        db.commit()
+
+        assert db.get(BenchmarkRun, b.id) is not None
+        db.delete(b)
+        db.commit()
+        assert db.get(BenchmarkRun, b.id) is None
+
+

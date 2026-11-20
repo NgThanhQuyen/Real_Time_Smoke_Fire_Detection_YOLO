@@ -1,0 +1,2 @@
+model,epochs_run,best_epoch,val_mAP50,val_mAP50_95
+transfer,182,152,0.78602,0.45426
